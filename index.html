@@ -229,6 +229,30 @@
     .card-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
     .card-subtitle { font-size: 1rem; color: var(--text-dim); max-width: 85%; line-height: 1.5; }
 
+    /* Profile Picture */
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--accent);
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    }
+
+    .profile-pic-placeholder {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--accent);
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
     .tweet-preview {
       background: var(--bg-elevated);
       border-radius: 16px;
@@ -293,15 +317,7 @@
     }
 
     .progress-segment.completed .progress-fill { width: 100%; }
-    .progress-segment.active .progress-fill { 
-      width: 100%;
-      animation: progressGrow 5s linear forwards;
-    }
-
-    @keyframes progressGrow {
-      from { width: 0%; }
-      to { width: 100%; }
-    }
+    .progress-segment.active .progress-fill { width: 100%; }
 
     .nav-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
 
@@ -402,24 +418,6 @@
     .glow { animation: glow 2s ease-in-out infinite alternate; }
     @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(0,255,136,0.5)); } to { filter: drop-shadow(0 0 30px rgba(0,255,136,0.8)); } }
 
-    /* Typewriter cursor */
-    .typewriter::after {
-      content: '|';
-      animation: blink 1s step-end infinite;
-      color: var(--accent);
-    }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    /* Word reveal animation */
-    .word-reveal {
-      display: inline-block;
-      overflow: hidden;
-    }
-
-    .word-reveal span {
-      display: inline-block;
-    }
-
     @media (max-width: 500px) {
       .logo { font-size: 2.5rem; }
       .card-value { font-size: 3rem; }
@@ -428,6 +426,7 @@
       .story-card { padding: 1.5rem; }
       .tweet-media { height: 130px; }
       .card-label { font-size: 0.75rem; letter-spacing: 2px; }
+      .profile-pic { width: 100px; height: 100px; }
     }
   </style>
 </head>
@@ -440,7 +439,7 @@
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect } = React;
     const { motion, AnimatePresence } = Motion;
 
     const API_URL = 'https://bulk-wrapped-api-production.up.railway.app';
@@ -452,7 +451,7 @@
       return num.toLocaleString();
     }
 
-    // Animated counter with easing
+    // Animated counter
     function AnimatedCounter({ value, duration = 2000 }) {
       const [displayValue, setDisplayValue] = useState(0);
       const numericValue = parseInt(String(value).replace(/[^0-9]/g, '')) || 0;
@@ -464,7 +463,6 @@
         const animate = (timestamp) => {
           if (!startTime) startTime = timestamp;
           const progress = Math.min((timestamp - startTime) / duration, 1);
-          // Ease out cubic
           const easeOut = 1 - Math.pow(1 - progress, 3);
           setDisplayValue(Math.floor(easeOut * numericValue));
           if (progress < 1) requestAnimationFrame(animate);
@@ -473,52 +471,6 @@
       }, [numericValue, duration]);
 
       return <span>{displayValue.toLocaleString()}{suffix}</span>;
-    }
-
-    // Word by word reveal animation
-    function WordReveal({ text, delay = 0 }) {
-      const words = text.split(' ');
-      return (
-        <span>
-          {words.map((word, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ 
-                delay: delay + i * 0.08,
-                duration: 0.4,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-              style={{ display: 'inline-block', marginRight: '0.3em' }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </span>
-      );
-    }
-
-    // Character by character reveal
-    function CharReveal({ text, delay = 0, speed = 0.03 }) {
-      return (
-        <span>
-          {text.split('').map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                delay: delay + i * speed,
-                duration: 0.2
-              }}
-              style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
-            >
-              {char}
-            </motion.span>
-          ))}
-        </span>
-      );
     }
 
     function LandingPage({ onSubmit }) {
@@ -545,7 +497,7 @@
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <WordReveal text="Your @bulktrade journey on X" delay={0.5} />
+            Your @bulktrade journey on X
           </motion.p>
 
           <motion.form 
@@ -665,18 +617,42 @@
             {card.type === 'intro' && (
               <>
                 <motion.p className="card-label" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                  <CharReveal text="YOUR BULK JOURNEY" delay={0.3} speed={0.04} />
+                  YOUR BULK JOURNEY
                 </motion.p>
+                
+                {/* Profile Picture */}
+                {card.profileImage ? (
+                  <motion.img 
+                    src={card.profileImage} 
+                    alt={card.handle}
+                    className="profile-pic"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3, type: "spring" }}
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                ) : (
+                  <motion.div 
+                    className="profile-pic-placeholder"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3, type: "spring" }}
+                  >
+                    👤
+                  </motion.div>
+                )}
+                
                 <motion.h2 
                   className={`card-value ${gradient}`} 
                   initial={{ opacity: 0, scale: 0.5, y: 30 }} 
                   animate={{ opacity: 1, scale: 1, y: 0 }} 
                   transition={{ delay: 0.5, type: "spring", stiffness: 150 }}
+                  style={{ fontSize: '2.5rem' }}
                 >
                   @{card.handle}
                 </motion.h2>
                 <motion.p className="card-subtitle" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-                  <WordReveal text="Let's see how you've been supporting $BULK" delay={0.9} />
+                  Let's see how you've been supporting $BULK
                 </motion.p>
               </>
             )}
@@ -695,7 +671,7 @@
                   {card.animate ? <AnimatedCounter value={card.value} duration={1500} /> : card.value}
                 </motion.h2>
                 <motion.p className="card-subtitle" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
-                  <WordReveal text={card.subtitle} delay={0.8} />
+                  {card.subtitle}
                 </motion.p>
               </>
             )}
@@ -761,6 +737,19 @@
 
             {card.type === 'final' && (
               <>
+                {/* Profile pic on final card too */}
+                {card.profileImage && (
+                  <motion.img 
+                    src={card.profileImage} 
+                    alt=""
+                    className="profile-pic"
+                    style={{ width: '80px', height: '80px', marginBottom: '1rem' }}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                )}
                 <motion.h2 
                   className="final-logo glow" 
                   initial={{ opacity: 0, scale: 0.5, y: -20 }} 
@@ -769,7 +758,7 @@
                 >
                   BULK WRAPPED
                 </motion.h2>
-                <motion.p className="card-label" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>Your Summary</motion.p>
+                <motion.p className="card-label" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>@{card.handle}</motion.p>
                 <motion.div className="summary-grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
                   {[
                     { value: card.stats.posts, label: 'Posts' },
@@ -811,11 +800,14 @@
       );
     }
 
-    function StoryView({ stats, handle, onRestart }) {
+    function StoryView({ stats, handle, user, onRestart }) {
       const [currentIndex, setCurrentIndex] = useState(0);
+      
+      // Get profile image from user data
+      const profileImage = user?.profile_image || stats?.profile_image;
 
       const cards = [
-        { type: 'intro', handle },
+        { type: 'intro', handle, profileImage },
         { type: 'stat', label: 'YOUR JOURNEY STARTED', value: stats.first_post_date || 'Unknown', subtitle: 'When you first mentioned @bulktrade', small: true },
         { type: 'stat', label: 'TOTAL BULK POSTS', value: String(stats.total_posts), subtitle: 'Times you mentioned @bulktrade', animate: true },
         { type: 'stat', label: 'TOTAL VIEWS', value: formatNumber(stats.total_views), subtitle: 'People saw your BULK content', animate: true },
@@ -823,9 +815,35 @@
         { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK' }
       ];
 
-      if (stats.most_viral_post) cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views 🔥', tweet: stats.most_viral_post });
-      if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes ❤️', tweet: stats.most_liked_post });
-      cards.push({ type: 'final', stats: { posts: formatNumber(stats.total_posts), views: formatNumber(stats.total_views), likes: formatNumber(stats.total_likes), streak: stats.posting_streak } });
+      if (stats.most_viral_post) {
+        cards.push({ 
+          type: 'tweet', 
+          label: 'YOUR VIRAL HIT', 
+          title: formatNumber(stats.most_viral_post.views) + ' views 🔥', 
+          tweet: stats.most_viral_post 
+        });
+      }
+      
+      if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
+        cards.push({ 
+          type: 'tweet', 
+          label: 'MOST LOVED POST', 
+          title: formatNumber(stats.most_liked_post.likes) + ' likes ❤️', 
+          tweet: stats.most_liked_post 
+        });
+      }
+      
+      cards.push({ 
+        type: 'final', 
+        handle,
+        profileImage,
+        stats: { 
+          posts: formatNumber(stats.total_posts), 
+          views: formatNumber(stats.total_views), 
+          likes: formatNumber(stats.total_likes), 
+          streak: stats.posting_streak 
+        } 
+      });
 
       const goNext = () => { if (currentIndex < cards.length - 1) setCurrentIndex(currentIndex + 1); };
       const goPrev = () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
@@ -854,7 +872,7 @@
                 className={`progress-segment ${i < currentIndex ? 'completed' : ''} ${i === currentIndex ? 'active' : ''}`}
                 onClick={() => setCurrentIndex(i)}
               >
-                <div className="progress-fill" style={i < currentIndex ? { width: '100%' } : i === currentIndex ? {} : { width: '0%' }} />
+                <div className="progress-fill" style={i <= currentIndex ? { width: '100%' } : { width: '0%' }} />
               </div>
             ))}
           </div>
@@ -879,6 +897,7 @@
       const [screen, setScreen] = useState('landing');
       const [handle, setHandle] = useState('');
       const [stats, setStats] = useState(null);
+      const [user, setUser] = useState(null);
       const [error, setError] = useState('');
 
       const handleSubmit = async (inputHandle) => {
@@ -894,9 +913,13 @@
           });
 
           const data = await response.json();
+          
+          console.log('API Response:', data); // Debug log
+          
           if (!response.ok) throw new Error(data.error || 'Failed to fetch data');
 
           setStats(data.stats);
+          setUser(data.user);
           setScreen('story');
         } catch (err) {
           console.error('Error:', err);
@@ -909,6 +932,7 @@
         setScreen('landing');
         setHandle('');
         setStats(null);
+        setUser(null);
         setError('');
       };
 
@@ -916,7 +940,7 @@
         <AnimatePresence mode="wait">
           {screen === 'landing' && <LandingPage key="landing" onSubmit={handleSubmit} />}
           {screen === 'loading' && <LoadingScreen key="loading" handle={handle} />}
-          {screen === 'story' && stats && <StoryView key="story" stats={stats} handle={handle} onRestart={handleRestart} />}
+          {screen === 'story' && stats && <StoryView key="story" stats={stats} handle={handle} user={user} onRestart={handleRestart} />}
           {screen === 'error' && <ErrorScreen key="error" message={error} onRetry={handleRestart} />}
         </AnimatePresence>
       );
