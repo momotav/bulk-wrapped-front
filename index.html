@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
       --bg: #000000;
       --bg-card: #0a0a0a;
@@ -21,672 +20,172 @@
       --gradient-3: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
       --gradient-4: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
     }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
     #root { min-height: 100vh; }
-
-    /* Landing Page */
-    .landing {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .logo {
-      font-size: 3rem;
-      font-weight: 900;
-      margin-bottom: 0.5rem;
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .tagline {
-      color: var(--text-dim);
-      font-size: 1.1rem;
-      margin-bottom: 3rem;
-    }
-
-    .input-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .handle-input {
-      background: var(--bg-elevated);
-      border: 2px solid #222;
-      border-radius: 16px;
-      padding: 1.25rem 1.5rem;
-      font-size: 1.1rem;
-      color: var(--text);
-      font-family: inherit;
-      text-align: center;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .handle-input:focus { 
-      outline: none; 
-      border-color: var(--accent);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
-    }
+    .landing { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+    .logo { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .tagline { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 3rem; }
+    .input-container { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 400px; }
+    .handle-input { background: var(--bg-elevated); border: 2px solid #222; border-radius: 16px; padding: 1.25rem 1.5rem; font-size: 1.1rem; color: var(--text); font-family: inherit; text-align: center; transition: all 0.3s; }
+    .handle-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
     .handle-input::placeholder { color: var(--text-dim); }
-
-    .generate-btn {
-      background: var(--gradient-1);
-      border: none;
-      border-radius: 16px;
-      padding: 1.25rem 2rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #000;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-family: inherit;
-    }
-
-    .generate-btn:hover { 
-      transform: scale(1.02);
-      box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
-    }
+    .generate-btn { background: var(--gradient-1); border: none; border-radius: 16px; padding: 1.25rem 2rem; font-size: 1.1rem; font-weight: 700; color: #000; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3); }
     .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    /* Loading Screen */
-    .loading-screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .loading-handle {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--accent);
-      margin-bottom: 2rem;
-    }
-
-    .progress-container {
-      width: 100%;
-      max-width: 350px;
-      margin-bottom: 2rem;
-    }
-
-    .progress-bar-bg {
-      width: 100%;
-      height: 8px;
-      background: var(--bg-elevated);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--gradient-1);
-      border-radius: 10px;
-      transition: width 0.5s ease-out;
-      box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
-    }
-
-    .progress-percentage {
-      font-size: 3rem;
-      font-weight: 800;
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
-    }
-
-    .progress-message {
-      color: var(--text-dim);
-      font-size: 1rem;
-      min-height: 24px;
-    }
-
-    .scanning-animation {
-      display: flex;
-      gap: 4px;
-      margin-top: 1.5rem;
-    }
-
-    .scanning-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: bounce 1.4s ease-in-out infinite;
-    }
-
-    .scanning-dot:nth-child(1) { animation-delay: 0s; }
-    .scanning-dot:nth-child(2) { animation-delay: 0.2s; }
-    .scanning-dot:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-      40% { transform: scale(1); opacity: 1; }
-    }
-
-    /* Story Container */
-    .story-container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-      padding-bottom: 180px;
-      position: relative;
-    }
-
-    .card-wrapper {
-      width: 100%;
-      max-width: 420px;
-      aspect-ratio: 9/16;
-      max-height: 68vh;
-      position: relative;
-      perspective: 1000px;
-      margin-top: 0.5rem;
-    }
-
-    .story-card {
-      position: absolute;
-      inset: 0;
-      background: var(--bg-card);
-      border-radius: 24px;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      border: 1px solid #222;
-      overflow: hidden;
-    }
-
-    .card-gradient {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 250px;
-      opacity: 0.4;
-      z-index: 0;
-      filter: blur(40px);
-    }
-
-    .card-content {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 100%;
-    }
-
-    .card-number {
-      position: absolute;
-      top: 1rem; right: 1rem;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      background: rgba(255,255,255,0.05);
-      padding: 0.3rem 0.6rem;
-      border-radius: 20px;
-    }
-
-    .card-label {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      margin-bottom: 1.5rem;
-    }
-
-    .card-value {
-      font-size: 4rem;
-      font-weight: 900;
-      margin-bottom: 0.5rem;
-      line-height: 1;
-    }
-
+    .loading-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+    .loading-handle { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 2rem; }
+    .progress-container { width: 100%; max-width: 350px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: var(--bg-elevated); border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
+    .progress-bar-fill { height: 100%; background: var(--gradient-1); border-radius: 10px; transition: width 0.3s ease; box-shadow: 0 0 15px rgba(0, 255, 136, 0.5); }
+    .progress-percentage { font-size: 3rem; font-weight: 800; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+    .progress-message { color: var(--text-dim); font-size: 1rem; min-height: 24px; }
+    .progress-submessage { color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.7; }
+    .loading-spinner { width: 24px; height: 24px; border: 3px solid var(--bg-elevated); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin-top: 1.5rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .story-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 1rem; padding-bottom: 2rem; }
+    .card-wrapper { width: 100%; max-width: 420px; aspect-ratio: 9/16; max-height: 58vh; position: relative; perspective: 1000px; margin-top: 0.5rem; }
+    .story-card { position: absolute; inset: 0; background: var(--bg-card); border-radius: 24px; padding: 1.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid #222; overflow: hidden; }
+    .card-gradient { position: absolute; top: 0; left: 0; right: 0; height: 180px; opacity: 0.4; z-index: 0; filter: blur(40px); }
+    .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; overflow-y: auto; }
+    .card-number { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.7rem; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 0.2rem 0.4rem; border-radius: 20px; }
+    .card-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem; }
+    .card-value { font-size: 2.75rem; font-weight: 900; margin-bottom: 0.4rem; line-height: 1; }
     .card-value.gradient { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .card-value.gradient-2 { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .card-value.gradient-3 { background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .card-value.gradient-4 { background: var(--gradient-4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .card-value.small { font-size: 2rem; }
-
-    .card-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
-    .card-subtitle { font-size: 1rem; color: var(--text-dim); max-width: 85%; line-height: 1.5; }
-
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 4px solid var(--accent);
-      object-fit: cover;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-    }
-
-    .profile-pic-placeholder {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 4px solid var(--accent);
-      background: var(--bg-elevated);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Tweet Preview */
-    .tweet-preview {
-      background: var(--bg-elevated);
-      border-radius: 16px;
-      margin-top: 1.5rem;
-      width: 100%;
-      text-align: left;
-      border: 1px solid #222;
-      overflow: hidden;
-    }
-
-    .tweet-media {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-bottom: 1px solid #222;
-      background: #111;
-    }
-
-    .tweet-body { padding: 1rem; }
-
-    .tweet-text {
-      font-size: 0.85rem;
-      line-height: 1.5;
-      color: var(--text);
-      margin-bottom: 0.75rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .tweet-stats { display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--text-dim); }
-    .tweet-stat { display: flex; align-items: center; gap: 0.4rem; }
-    .tweet-stat svg { width: 14px; height: 14px; }
-
-    /* Chronological Timeline Strip */
-    .timeline-strip {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(to top, var(--bg) 85%, transparent);
-      padding: 1.25rem 1rem 1.5rem;
-      z-index: 100;
-    }
-
-    .timeline-inner {
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .timeline-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.6rem;
-      padding: 0 0.25rem;
-    }
-
-    .timeline-label {
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    .timeline-date-range {
-      font-size: 0.7rem;
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .timeline-track {
-      position: relative;
-      height: 50px;
-      background: var(--bg-elevated);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid #222;
-    }
-
-    .timeline-bars {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: flex-end;
-      padding: 6px;
-      gap: 2px;
-    }
-
-    .timeline-bar {
-      flex: 1;
-      background: #1a1a1a;
-      border-radius: 2px;
-      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-      min-height: 4px;
-    }
-
-    .timeline-bar.revealed {
-      background: var(--gradient-1);
-      box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
-    }
-
-    .timeline-current-marker {
-      position: absolute;
-      top: 4px;
-      width: 2px;
-      height: calc(100% - 8px);
-      background: white;
-      border-radius: 1px;
-      box-shadow: 0 0 10px white;
-      transition: left 0.5s ease-out;
-    }
-
-    .timeline-events {
-      display: flex;
-      gap: 6px;
-      margin-top: 0.6rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .timeline-badge {
-      background: var(--bg-elevated);
-      border: 1px solid #333;
-      border-radius: 16px;
-      padding: 0.2rem 0.5rem;
-      font-size: 0.6rem;
-      color: var(--text-dim);
-      opacity: 0;
-      transform: translateY(5px) scale(0.9);
-      transition: all 0.4s ease;
-    }
-
-    .timeline-badge.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .timeline-badge.highlight {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(0, 255, 136, 0.1);
-    }
-
-    /* Navigation */
-    .nav-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
-    }
-
-    .progress-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .progress-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .progress-dot.active {
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
-    }
-
-    .progress-dot.completed {
-      background: var(--accent);
-      opacity: 0.5;
-    }
-
-    .nav-buttons { display: flex; gap: 1rem; }
-
-    .nav-btn {
-      background: var(--bg-elevated);
-      border: 1px solid #333;
-      border-radius: 50%;
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text);
-    }
-
+    .card-value.small { font-size: 1.4rem; }
+    .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .card-subtitle { font-size: 0.8rem; color: var(--text-dim); max-width: 90%; line-height: 1.3; }
+    .profile-pic { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; margin-bottom: 0.75rem; box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+    .profile-pic-placeholder { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 0.75rem; }
+    .tweet-preview { background: var(--bg-elevated); border-radius: 10px; margin-top: 0.6rem; width: 100%; text-align: left; border: 1px solid #222; overflow: hidden; }
+    .tweet-media { width: 100%; height: 80px; object-fit: cover; border-bottom: 1px solid #222; background: #111; }
+    .tweet-body { padding: 0.5rem; }
+    .tweet-text { font-size: 0.7rem; line-height: 1.35; color: var(--text); margin-bottom: 0.3rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .tweet-stats { display: flex; gap: 0.75rem; font-size: 0.65rem; color: var(--text-dim); }
+    .tweet-stat { display: flex; align-items: center; gap: 0.2rem; }
+    .tweet-stat svg { width: 10px; height: 10px; }
+    .tweet-date { font-size: 0.6rem; color: var(--accent); margin-bottom: 0.2rem; }
+    .timeline-strip { width: 100%; max-width: 420px; margin-top: 0.75rem; padding: 0.75rem; background: var(--bg-card); border-radius: 14px; border: 1px solid #222; }
+    .timeline-header { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+    .timeline-title { font-size: 0.65rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+    .timeline-dots-container { position: relative; height: 60px; display: flex; align-items: center; }
+    .timeline-line-bg { position: absolute; top: 50%; left: 15px; right: 15px; height: 2px; background: #222; transform: translateY(-50%); }
+    .timeline-line-progress { position: absolute; top: 50%; left: 15px; height: 2px; background: var(--gradient-1); transform: translateY(-50%); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(0, 255, 136, 0.5); }
+    .timeline-dots { position: relative; width: 100%; display: flex; justify-content: space-between; padding: 0 15px; }
+    .timeline-dot-item { display: flex; flex-direction: column; align-items: center; z-index: 2; cursor: pointer; }
+    .timeline-dot { width: 20px; height: 20px; border-radius: 50%; background: #222; border: 2px solid #333; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+    .timeline-dot.passed { background: #1a3d2a; border-color: var(--accent); }
+    .timeline-dot.active { background: var(--accent); border-color: #fff; box-shadow: 0 0 12px var(--accent); transform: scale(1.2); }
+    .timeline-dot-label { font-size: 0.5rem; color: var(--text-dim); margin-top: 0.3rem; text-align: center; max-width: 50px; line-height: 1.1; opacity: 0.6; transition: all 0.3s; }
+    .timeline-dot-item.active .timeline-dot-label { opacity: 1; color: var(--text); font-weight: 500; }
+    .timeline-current-info { text-align: center; margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid #222; }
+    .timeline-current-title { font-size: 0.75rem; font-weight: 600; color: var(--text); }
+    .timeline-current-date { font-size: 0.6rem; color: var(--accent); margin-top: 0.1rem; }
+    .nav-controls { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; margin-top: 0.6rem; width: 100%; max-width: 420px; }
+    .progress-bar { display: flex; gap: 3px; width: 100%; max-width: 280px; }
+    .progress-segment { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.1); overflow: hidden; cursor: pointer; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
+    .progress-segment.completed .progress-fill, .progress-segment.active .progress-fill { width: 100%; }
+    .nav-buttons { display: flex; gap: 0.75rem; }
+    .nav-btn { background: var(--bg-elevated); border: 1px solid #333; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: var(--text); }
     .nav-btn:hover { background: #222; border-color: var(--accent); color: var(--accent); }
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .nav-btn svg { width: 18px; height: 18px; }
-
-    .final-logo {
-      font-size: 2rem;
-      font-weight: 900;
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 1.5rem;
-    }
-
-    .share-btn {
-      background: var(--gradient-1);
-      border: none;
-      border-radius: 12px;
-      padding: 0.875rem 1.75rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #000;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 0.5rem;
-      margin-top: 1.5rem;
-      font-family: inherit;
-      transition: transform 0.2s;
-    }
-
+    .nav-btn svg { width: 16px; height: 16px; }
+    .final-logo { font-size: 1.4rem; font-weight: 900; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+    .share-btn { background: var(--gradient-1); border: none; border-radius: 10px; padding: 0.6rem 1rem; font-size: 0.8rem; font-weight: 600; color: #000; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; margin-top: 0.6rem; font-family: inherit; }
     .share-btn:hover { transform: scale(1.05); }
-
-    .restart-btn {
-      background: transparent;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 0.75rem 1.5rem;
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      cursor: pointer;
-      margin-top: 0.5rem;
-      font-family: inherit;
-    }
-
+    .restart-btn { background: transparent; border: 1px solid #333; border-radius: 10px; padding: 0.4rem 0.8rem; font-size: 0.75rem; color: var(--text-dim); cursor: pointer; margin-top: 0.4rem; font-family: inherit; }
     .restart-btn:hover { border-color: var(--text-dim); color: var(--text); }
-
-    .error-screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-    }
-
+    .error-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
     .error-icon { font-size: 4rem; margin-bottom: 1rem; }
     .error-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
     .error-message { color: var(--text-dim); margin-bottom: 2rem; max-width: 300px; }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .summary-item {
-      background: var(--bg-elevated);
-      border-radius: 12px;
-      padding: 1rem 0.75rem;
-      text-align: center;
-      border: 1px solid #222;
-    }
-
-    .summary-value { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
-    .summary-label { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 1px; }
-
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; width: 100%; margin-top: 0.4rem; }
+    .summary-item { background: var(--bg-elevated); border-radius: 8px; padding: 0.5rem; text-align: center; border: 1px solid #222; }
+    .summary-value { font-size: 1rem; font-weight: 700; color: var(--accent); }
+    .summary-label { font-size: 0.5rem; color: var(--text-dim); margin-top: 0.05rem; text-transform: uppercase; }
     .glow { animation: glow 2s ease-in-out infinite alternate; }
     @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(0,255,136,0.5)); } to { filter: drop-shadow(0 0 30px rgba(0,255,136,0.8)); } }
-
     @media (max-width: 500px) {
       .logo { font-size: 2.5rem; }
-      .card-value { font-size: 3rem; }
-      .card-value.small { font-size: 1.5rem; }
-      .card-wrapper { max-height: 62vh; }
-      .story-card { padding: 1.5rem; }
-      .tweet-media { height: 120px; }
-      .profile-pic { width: 100px; height: 100px; }
-      .story-container { padding-bottom: 170px; }
+      .card-value { font-size: 2.25rem; }
+      .card-value.small { font-size: 1.2rem; }
+      .card-wrapper { max-height: 50vh; }
+      .story-card { padding: 1rem; }
+      .profile-pic { width: 65px; height: 65px; }
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
-
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect } = React;
     const { motion, AnimatePresence } = Motion;
-
     const API_URL = 'https://bulk-wrapped-api-production.up.railway.app';
 
-    function formatNumber(num) {
+    const formatNumber = (num) => {
       if (!num) return '0';
       if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
       if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
       return num.toLocaleString();
-    }
+    };
 
-    function AnimatedCounter({ value, duration = 2000 }) {
+    const formatDate = (dateStr) => {
+      if (!dateStr) return '';
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      } catch { return dateStr; }
+    };
+
+    function AnimatedCounter({ value, duration = 1500 }) {
       const [displayValue, setDisplayValue] = useState(0);
       const numericValue = parseInt(String(value).replace(/[^0-9]/g, '')) || 0;
       const suffix = String(value).replace(/[0-9.,]/g, '');
-
       useEffect(() => {
         setDisplayValue(0);
         let startTime;
         const animate = (timestamp) => {
           if (!startTime) startTime = timestamp;
           const progress = Math.min((timestamp - startTime) / duration, 1);
-          const easeOut = 1 - Math.pow(1 - progress, 3);
-          setDisplayValue(Math.floor(easeOut * numericValue));
+          setDisplayValue(Math.floor((1 - Math.pow(1 - progress, 3)) * numericValue));
           if (progress < 1) requestAnimationFrame(animate);
         };
         requestAnimationFrame(animate);
-      }, [numericValue, duration]);
-
+      }, [numericValue]);
       return <span>{displayValue.toLocaleString()}{suffix}</span>;
     }
 
     function LandingPage({ onSubmit }) {
       const [handle, setHandle] = useState('');
-
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        if (handle.trim()) onSubmit(handle.trim().replace('@', ''));
-      };
-
       return (
         <motion.div className="landing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <motion.h1 className="logo glow" initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1, type: "spring" }}>
-            BULK WRAPPED
-          </motion.h1>
-          <motion.p className="tagline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
-            Your @bulktrade journey on X
-          </motion.p>
-
-          <motion.form className="input-container" onSubmit={handleSubmit} initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7 }}>
-            <input
-              type="text"
-              className="handle-input"
-              placeholder="Enter your @handle"
-              value={handle}
-              onChange={(e) => setHandle(e.target.value)}
-            />
-            <motion.button type="submit" className="generate-btn" disabled={!handle.trim()} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              Generate My Wrapped
-            </motion.button>
+          <motion.h1 className="logo glow" initial={{ y: -50 }} animate={{ y: 0 }}>BULK WRAPPED</motion.h1>
+          <motion.p className="tagline" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>Your @bulktrade journey on X</motion.p>
+          <motion.form className="input-container" onSubmit={(e) => { e.preventDefault(); if (handle.trim()) onSubmit(handle.trim().replace('@', '')); }} initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}>
+            <input type="text" className="handle-input" placeholder="Enter your @handle" value={handle} onChange={(e) => setHandle(e.target.value)} />
+            <button type="submit" className="generate-btn" disabled={!handle.trim()}>Generate My Wrapped</button>
           </motion.form>
         </motion.div>
       );
     }
 
-    function LoadingScreen({ handle, progress, message }) {
+    function LoadingScreen({ handle, progress, message, pagesScanned, tweetsFound }) {
       return (
         <motion.div className="loading-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <motion.p className="loading-handle" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
-            @{handle}
-          </motion.p>
-          
+          <motion.p className="loading-handle">@{handle}</motion.p>
           <div className="progress-container">
-            <div className="progress-bar-bg">
-              <motion.div 
-                className="progress-bar-fill" 
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            
-            <motion.div 
-              className="progress-percentage"
-              key={Math.floor(progress / 10)}
-              initial={{ scale: 1.1 }}
-              animate={{ scale: 1 }}
-            >
-              {progress}%
-            </motion.div>
-            
+            <div className="progress-bar-bg"><motion.div className="progress-bar-fill" animate={{ width: `${progress}%` }} /></div>
+            <div className="progress-percentage">{progress}%</div>
             <p className="progress-message">{message}</p>
-            
-            <div className="scanning-animation">
-              <div className="scanning-dot" />
-              <div className="scanning-dot" />
-              <div className="scanning-dot" />
-            </div>
+            {(pagesScanned > 0 || tweetsFound > 0) && <p className="progress-submessage">{pagesScanned > 0 && `Page ${pagesScanned}`}{tweetsFound > 0 && ` • ${tweetsFound} tweets`}</p>}
+            <div className="loading-spinner" />
           </div>
         </motion.div>
       );
@@ -697,316 +196,166 @@
         <motion.div className="error-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="error-icon">😔</div>
           <h2 className="error-title">Oops!</h2>
-          <p className="error-message">{message || 'Something went wrong'}</p>
+          <p className="error-message">{message}</p>
           <button className="generate-btn" onClick={onRetry}>Try Again</button>
         </motion.div>
       );
     }
 
-    function ChronologicalTimeline({ timeline, currentIndex, totalCards, stats }) {
-      const events = timeline?.filter(e => e.type !== 'biweekly_chart') || [];
-      const chartData = timeline?.find(e => e.type === 'biweekly_chart')?.data || [];
-      
-      // Progress through the story (0 to 1)
-      const storyProgress = currentIndex / (totalCards - 1);
-      
-      // How many bars should be revealed
-      const revealedBars = Math.ceil(chartData.length * storyProgress);
-      
-      // Current marker position
-      const markerPosition = 6 + (storyProgress * (100 - 12)); // 6px padding on each side
-      
-      // Which events to show
-      const visibleEventCount = Math.ceil(events.length * storyProgress);
-      
-      const maxViews = Math.max(...chartData.map(d => d.views), 1);
-      const firstDate = stats?.first_post_date || 'Start';
-
+    function TweetPreview({ tweet }) {
+      if (!tweet) return null;
       return (
-        <div className="timeline-strip">
-          <div className="timeline-inner">
-            <div className="timeline-header">
-              <span className="timeline-label">Your Journey</span>
-              <span className="timeline-date-range">
-                {currentIndex === 0 ? '...' : `${firstDate} → Now`}
-              </span>
-            </div>
-            
-            <div className="timeline-track">
-              <div className="timeline-bars">
-                {chartData.length > 0 ? chartData.map((period, i) => {
-                  const height = Math.max((period.views / maxViews) * 100, 10);
-                  const isRevealed = i < revealedBars;
-                  
-                  return (
-                    <div
-                      key={i}
-                      className={`timeline-bar ${isRevealed ? 'revealed' : ''}`}
-                      style={{ 
-                        height: isRevealed ? `${height}%` : '10%',
-                        transitionDelay: isRevealed ? `${(i - revealedBars + 3) * 0.05}s` : '0s'
-                      }}
-                      title={`${period.period}: ${formatNumber(period.views)} views`}
-                    />
-                  );
-                }) : (
-                  // Fallback if no chart data
-                  Array.from({ length: 20 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={`timeline-bar ${i < revealedBars ? 'revealed' : ''}`}
-                      style={{ height: `${20 + Math.random() * 60}%` }}
-                    />
-                  ))
-                )}
-              </div>
-              
-              {/* Moving marker */}
-              <div 
-                className="timeline-current-marker"
-                style={{ left: `${markerPosition}%` }}
-              />
-            </div>
-            
-            {/* Event badges */}
-            <div className="timeline-events">
-              {events.slice(0, 5).map((event, i) => {
-                const isVisible = i < visibleEventCount;
-                const isHighlight = event.type === 'milestone' || event.type === 'viral';
-                
-                return (
-                  <div
-                    key={i}
-                    className={`timeline-badge ${isVisible ? 'visible' : ''} ${isHighlight ? 'highlight' : ''}`}
-                    style={{ transitionDelay: `${i * 0.1}s` }}
-                  >
-                    {event.title}
-                  </div>
-                );
-              })}
+        <div className="tweet-preview">
+          {tweet.media && <img src={tweet.media} className="tweet-media" onError={(e) => e.target.style.display = 'none'} />}
+          <div className="tweet-body">
+            {tweet.date && <div className="tweet-date">{formatDate(tweet.date)}</div>}
+            <p className="tweet-text">{tweet.text}</p>
+            <div className="tweet-stats">
+              <span className="tweet-stat"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>{formatNumber(tweet.likes)}</span>
+              <span className="tweet-stat"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>{formatNumber(tweet.views)}</span>
             </div>
           </div>
         </div>
       );
     }
 
+    function TimelineStrip({ stats, currentIndex, totalCards }) {
+      const dots = [
+        { id: 'first', label: 'First Post', emoji: '🚀', cardIdx: 1 },
+        { id: 'viral', label: 'Viral', emoji: '🔥', cardIdx: 6 },
+        { id: 'liked', label: 'Loved', emoji: '❤️', cardIdx: 7 },
+        { id: 'now', label: 'Summary', emoji: '⭐', cardIdx: totalCards - 1 }
+      ].filter(d => {
+        if (d.id === 'viral') return !!stats.most_viral_post;
+        if (d.id === 'liked') return stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text;
+        return true;
+      });
+
+      let activeIdx = 0;
+      for (let i = dots.length - 1; i >= 0; i--) {
+        if (currentIndex >= dots[i].cardIdx) { activeIdx = i; break; }
+      }
+      const progressWidth = dots.length > 1 ? (activeIdx / (dots.length - 1)) * 100 : 0;
+      const current = dots[activeIdx];
+
+      return (
+        <motion.div className="timeline-strip" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="timeline-header"><span className="timeline-title">📅 Your Journey</span></div>
+          <div className="timeline-dots-container">
+            <div className="timeline-line-bg" />
+            <motion.div className="timeline-line-progress" animate={{ width: `calc(${progressWidth}% - 0px)` }} transition={{ duration: 0.4 }} />
+            <div className="timeline-dots">
+              {dots.map((dot, i) => (
+                <div key={dot.id} className={`timeline-dot-item ${i === activeIdx ? 'active' : ''}`}>
+                  <motion.div className={`timeline-dot ${i < activeIdx ? 'passed' : ''} ${i === activeIdx ? 'active' : ''}`} animate={i === activeIdx ? { scale: [1, 1.15, 1] } : {}} transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 1.5 }}>{dot.emoji}</motion.div>
+                  <span className="timeline-dot-label">{dot.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <motion.div className="timeline-current-info" key={activeIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <div className="timeline-current-title">{current.emoji} {current.label}</div>
+            <div className="timeline-current-date">{current.id === 'first' ? stats.first_post_date : current.id === 'now' ? 'Your BULK Stats' : ''}</div>
+          </motion.div>
+        </motion.div>
+      );
+    }
+
     function StoryCard({ card, index, total }) {
       const gradients = ['gradient', 'gradient-2', 'gradient-3', 'gradient-4'];
       const gradient = gradients[index % gradients.length];
-      const bgGradients = [
-        'radial-gradient(circle at 50% 0%, rgba(0,255,136,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(255,107,107,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(168,85,247,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(59,130,246,0.4) 0%, transparent 60%)'
-      ];
+      const bgGradients = ['radial-gradient(circle at 50% 0%, rgba(0,255,136,0.4) 0%, transparent 60%)', 'radial-gradient(circle at 50% 0%, rgba(255,107,107,0.4) 0%, transparent 60%)', 'radial-gradient(circle at 50% 0%, rgba(168,85,247,0.4) 0%, transparent 60%)', 'radial-gradient(circle at 50% 0%, rgba(59,130,246,0.4) 0%, transparent 60%)'];
 
       return (
-        <motion.div
-          className="story-card"
-          initial={{ opacity: 0, scale: 0.9, rotateX: 10 }}
-          animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-          exit={{ opacity: 0, scale: 0.9, rotateX: -10 }}
-          transition={{ duration: 0.4 }}
-        >
+        <motion.div className="story-card" initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }} transition={{ duration: 0.3 }}>
           <div className="card-gradient" style={{ background: bgGradients[index % bgGradients.length] }} />
           <div className="card-content">
             <span className="card-number">{index + 1}/{total}</span>
             
-            {card.type === 'intro' && (
-              <>
-                <p className="card-label">YOUR BULK JOURNEY</p>
-                {card.profileImage ? (
-                  <motion.img src={card.profileImage} alt="" className="profile-pic" initial={{ scale: 0.5 }} animate={{ scale: 1 }} onError={(e) => e.target.style.display = 'none'} />
-                ) : (
-                  <div className="profile-pic-placeholder">👤</div>
-                )}
-                <motion.h2 className={`card-value ${gradient}`} style={{ fontSize: '2.5rem' }} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>
-                  @{card.handle}
-                </motion.h2>
-                <p className="card-subtitle">Let's see how you've been supporting $BULK</p>
-              </>
-            )}
+            {card.type === 'intro' && (<>
+              <p className="card-label">YOUR BULK JOURNEY</p>
+              {card.profileImage ? <motion.img src={card.profileImage} className="profile-pic" initial={{ scale: 0.5 }} animate={{ scale: 1 }} onError={(e) => e.target.style.display = 'none'} /> : <div className="profile-pic-placeholder">👤</div>}
+              <motion.h2 className={`card-value ${gradient}`} style={{ fontSize: '1.6rem' }}>@{card.handle}</motion.h2>
+              <p className="card-subtitle">Let's explore your $BULK support</p>
+            </>)}
 
-            {card.type === 'stat' && (
-              <>
-                <p className="card-label">{card.label}</p>
-                <motion.h2 className={`card-value ${card.small ? 'small' : ''} ${gradient}`} initial={{ scale: 0.3 }} animate={{ scale: 1 }}>
-                  {card.animate ? <AnimatedCounter value={card.value} /> : card.value}
-                </motion.h2>
-                <p className="card-subtitle">{card.subtitle}</p>
-              </>
-            )}
+            {card.type === 'first_post' && (<>
+              <p className="card-label">🚀 JOURNEY STARTED</p>
+              <motion.h2 className={`card-value small ${gradient}`}>{card.date}</motion.h2>
+              <p className="card-subtitle">Your first BULK mention</p>
+              {card.tweet && <TweetPreview tweet={card.tweet} />}
+            </>)}
 
-            {card.type === 'tweet' && (
-              <>
-                <p className="card-label">{card.label}</p>
-                <h2 className="card-title">{card.title}</h2>
-                {card.tweet && (
-                  <div className="tweet-preview">
-                    {card.tweet.media && <img src={card.tweet.media} alt="" className="tweet-media" onError={(e) => e.target.style.display = 'none'} />}
-                    <div className="tweet-body">
-                      <p className="tweet-text">{card.tweet.text}</p>
-                      <div className="tweet-stats">
-                        <span className="tweet-stat">
-                          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                          {formatNumber(card.tweet.likes)}
-                        </span>
-                        <span className="tweet-stat">
-                          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                          {formatNumber(card.tweet.views)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
+            {card.type === 'stat' && (<>
+              <p className="card-label">{card.label}</p>
+              <motion.h2 className={`card-value ${card.small ? 'small' : ''} ${gradient}`}>{card.animate ? <AnimatedCounter value={card.value} /> : card.value}</motion.h2>
+              <p className="card-subtitle">{card.subtitle}</p>
+            </>)}
 
-            {card.type === 'final' && (
-              <>
-                {card.profileImage && <img src={card.profileImage} alt="" className="profile-pic" style={{ width: '70px', height: '70px', marginBottom: '1rem' }} onError={(e) => e.target.style.display = 'none'} />}
-                <h2 className="final-logo glow">BULK WRAPPED</h2>
-                <p className="card-label">@{card.handle}</p>
-                <div className="summary-grid">
-                  {[
-                    { value: card.stats.posts, label: 'Posts' },
-                    { value: card.stats.views, label: 'Views' },
-                    { value: card.stats.likes, label: 'Likes' },
-                    { value: card.stats.streak, label: 'Streak' }
-                  ].map((item, i) => (
-                    <motion.div key={i} className="summary-item" initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.1 * i }}>
-                      <div className="summary-value">{item.value}</div>
-                      <div className="summary-label">{item.label}</div>
-                    </motion.div>
-                  ))}
-                </div>
-                <button className="share-btn" onClick={() => {
-                  const text = `My BULK Wrapped 🎁\n\n📝 ${card.stats.posts} posts\n👀 ${card.stats.views} views\n❤️ ${card.stats.likes} likes\n🔥 ${card.stats.streak} month streak\n\nGenerate yours 👇`;
-                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-                }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                  Share on X
-                </button>
-              </>
-            )}
+            {card.type === 'tweet' && (<>
+              <p className="card-label">{card.label}</p>
+              <h2 className="card-title">{card.title}</h2>
+              {card.tweet && <TweetPreview tweet={card.tweet} />}
+            </>)}
+
+            {card.type === 'final' && (<>
+              {card.profileImage && <img src={card.profileImage} className="profile-pic" style={{ width: '45px', height: '45px', marginBottom: '0.4rem' }} onError={(e) => e.target.style.display = 'none'} />}
+              <h2 className="final-logo glow">BULK WRAPPED</h2>
+              <p className="card-label">@{card.handle}</p>
+              <div className="summary-grid">
+                {[{ v: card.stats.posts, l: 'Posts' }, { v: card.stats.views, l: 'Views' }, { v: card.stats.likes, l: 'Likes' }, { v: card.stats.streak, l: 'Streak' }].map((x, i) => (
+                  <div key={i} className="summary-item"><div className="summary-value">{x.v}</div><div className="summary-label">{x.l}</div></div>
+                ))}
+              </div>
+              <button className="share-btn" onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`My BULK Wrapped 🎁\n\n📝 ${card.stats.posts} posts\n👀 ${card.stats.views} views\n❤️ ${card.stats.likes} likes\n🔥 ${card.stats.streak} month streak\n\nGenerate yours 👇`)}`, '_blank')}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z"/></svg>Share
+              </button>
+            </>)}
           </div>
         </motion.div>
       );
     }
 
-    function StoryView({ stats, handle, user, timeline, onRestart }) {
-      const [currentIndex, setCurrentIndex] = useState(0);
-      const profileImage = user?.profile_image || stats?.profile_image;
+    function StoryView({ stats, handle, user, onRestart }) {
+      const [idx, setIdx] = useState(0);
+      const pfp = user?.profile_image || stats?.profile_image;
+      const firstTweet = stats.first_post ? { text: stats.first_post.text, date: stats.first_post.date, likes: 0, views: 0 } : null;
 
       const cards = [
-        { type: 'intro', handle, profileImage },
-        { type: 'stat', label: 'YOUR JOURNEY STARTED', value: stats.first_post_date || 'Unknown', subtitle: 'When you first mentioned @bulktrade', small: true },
-        { type: 'stat', label: 'TOTAL BULK POSTS', value: String(stats.total_posts), subtitle: 'Times you mentioned BULK', animate: true },
-        { type: 'stat', label: 'TOTAL VIEWS', value: formatNumber(stats.total_views), subtitle: 'People saw your BULK content', animate: true },
-        { type: 'stat', label: 'TOTAL LIKES', value: formatNumber(stats.total_likes), subtitle: 'Hearts on your BULK posts', animate: true },
-        { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK' }
+        { type: 'intro', handle, profileImage: pfp },
+        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet },
+        { type: 'stat', label: 'BULK POSTS', value: String(stats.total_posts), subtitle: 'Total mentions', animate: true },
+        { type: 'stat', label: 'TOTAL VIEWS', value: formatNumber(stats.total_views), subtitle: 'People reached', animate: true },
+        { type: 'stat', label: 'TOTAL LIKES', value: formatNumber(stats.total_likes), subtitle: 'Hearts earned', animate: true },
+        { type: 'stat', label: 'STREAK', value: stats.posting_streak + ' mo', subtitle: 'Consecutive months' }
       ];
+      if (stats.most_viral_post) cards.push({ type: 'tweet', label: '🔥 VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post });
+      if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) cards.push({ type: 'tweet', label: '❤️ MOST LOVED', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post });
+      cards.push({ type: 'final', handle, profileImage: pfp, stats: { posts: formatNumber(stats.total_posts), views: formatNumber(stats.total_views), likes: formatNumber(stats.total_likes), streak: stats.posting_streak } });
 
-      if (stats.most_viral_post) {
-        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views 🔥', tweet: stats.most_viral_post });
-      }
-      
-      if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
-        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes ❤️', tweet: stats.most_liked_post });
-      }
-      
-      cards.push({ 
-        type: 'final', 
-        handle,
-        profileImage,
-        stats: { 
-          posts: formatNumber(stats.total_posts), 
-          views: formatNumber(stats.total_views), 
-          likes: formatNumber(stats.total_likes), 
-          streak: stats.posting_streak 
-        } 
-      });
-
-      const goNext = () => { if (currentIndex < cards.length - 1) setCurrentIndex(currentIndex + 1); };
-      const goPrev = () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
+      const next = () => idx < cards.length - 1 && setIdx(idx + 1);
+      const prev = () => idx > 0 && setIdx(idx - 1);
 
       useEffect(() => {
-        const handleKey = (e) => {
-          if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goNext(); }
-          else if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
-        };
-        window.addEventListener('keydown', handleKey);
-        return () => window.removeEventListener('keydown', handleKey);
-      }, [currentIndex]);
-
-      // Touch swipe
-      const touchStart = useRef(null);
-      const handleTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
-      const handleTouchEnd = (e) => {
-        if (!touchStart.current) return;
-        const diff = touchStart.current - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) {
-          if (diff > 0) goNext();
-          else goPrev();
-        }
-        touchStart.current = null;
-      };
+        const h = (e) => { if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); } else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); } };
+        window.addEventListener('keydown', h);
+        return () => window.removeEventListener('keydown', h);
+      }, [idx]);
 
       return (
         <motion.div className="story-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div 
-            className="card-wrapper" 
-            onClick={goNext} 
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            style={{ cursor: currentIndex < cards.length - 1 ? 'pointer' : 'default' }}
-          >
-            <AnimatePresence mode="wait">
-              <StoryCard key={currentIndex} card={cards[currentIndex]} index={currentIndex} total={cards.length} />
-            </AnimatePresence>
+          <div className="card-wrapper" onClick={next} style={{ cursor: idx < cards.length - 1 ? 'pointer' : 'default' }}>
+            <AnimatePresence mode="wait"><StoryCard key={idx} card={cards[idx]} index={idx} total={cards.length} /></AnimatePresence>
           </div>
-
-          <div className="nav-area">
-            <div className="progress-dots">
-              {cards.map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`progress-dot ${i === currentIndex ? 'active' : ''} ${i < currentIndex ? 'completed' : ''}`}
-                  onClick={() => setCurrentIndex(i)}
-                />
-              ))}
-            </div>
-
+          <TimelineStrip stats={stats} currentIndex={idx} totalCards={cards.length} />
+          <div className="nav-controls">
+            <div className="progress-bar">{cards.map((_, i) => <div key={i} className={`progress-segment ${i < idx ? 'completed' : ''} ${i === idx ? 'active' : ''}`} onClick={() => setIdx(i)}><div className="progress-fill" style={{ width: i <= idx ? '100%' : '0%' }} /></div>)}</div>
             <div className="nav-buttons">
-              <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goPrev(); }} disabled={currentIndex === 0}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goNext(); }} disabled={currentIndex === cards.length - 1}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
+              <button className="nav-btn" onClick={(e) => { e.stopPropagation(); prev(); }} disabled={idx === 0}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button className="nav-btn" onClick={(e) => { e.stopPropagation(); next(); }} disabled={idx === cards.length - 1}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg></button>
             </div>
-
-            {currentIndex === cards.length - 1 && (
-              <motion.button 
-                className="restart-btn" 
-                onClick={onRestart}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                Try Another Handle
-              </motion.button>
-            )}
+            {idx === cards.length - 1 && <button className="restart-btn" onClick={onRestart}>Try Another</button>}
           </div>
-
-          {/* Chronological Timeline - Fixed at bottom, updates as you scroll */}
-          {timeline && timeline.length > 0 && (
-            <ChronologicalTimeline 
-              timeline={timeline} 
-              currentIndex={currentIndex} 
-              totalCards={cards.length}
-              stats={stats}
-            />
-          )}
         </motion.div>
       );
     }
@@ -1016,91 +365,67 @@
       const [handle, setHandle] = useState('');
       const [stats, setStats] = useState(null);
       const [user, setUser] = useState(null);
-      const [timeline, setTimeline] = useState(null);
       const [error, setError] = useState('');
       const [progress, setProgress] = useState(0);
-      const [loadingMessage, setLoadingMessage] = useState('Connecting...');
+      const [msg, setMsg] = useState('Connecting...');
+      const [pages, setPages] = useState(0);
+      const [tweets, setTweets] = useState(0);
 
-      const handleSubmit = async (inputHandle) => {
-        setHandle(inputHandle);
-        setScreen('loading');
-        setError('');
-        setProgress(0);
-        setLoadingMessage('Connecting to API...');
-
-        // Simulate progress while waiting
-        const messages = [
-          { at: 5, msg: 'Fetching profile...' },
-          { at: 15, msg: 'Scanning your timeline...' },
-          { at: 25, msg: 'Finding BULK mentions...' },
-          { at: 40, msg: 'Checking for gBULK posts...' },
-          { at: 55, msg: 'Analyzing engagement...' },
-          { at: 70, msg: 'Calculating your stats...' },
-          { at: 85, msg: 'Building timeline...' },
-          { at: 95, msg: 'Almost there...' }
-        ];
-
-        let progressInterval;
-        let currentProgress = 0;
+      const submit = async (h) => {
+        setHandle(h); setScreen('loading'); setProgress(0); setPages(0); setTweets(0); setMsg('Connecting...');
         
-        progressInterval = setInterval(() => {
-          if (currentProgress < 95) {
-            currentProgress += Math.random() * 4 + 1;
-            currentProgress = Math.min(currentProgress, 95);
-            setProgress(Math.floor(currentProgress));
-            
-            const msg = messages.find(m => m.at <= currentProgress && m.at > currentProgress - 8);
-            if (msg) setLoadingMessage(msg.msg);
-          }
-        }, 400);
+        // Try SSE
+        let sseOk = false;
+        const es = new EventSource(`${API_URL}/api/wrapped/stream?handle=${encodeURIComponent(h)}`);
+        const to = setTimeout(() => { if (!sseOk) { es.close(); fallback(h); } }, 5000);
+
+        es.onmessage = (e) => {
+          sseOk = true; clearTimeout(to);
+          try {
+            const d = JSON.parse(e.data);
+            if (d.progress) setProgress(d.progress);
+            if (d.message) setMsg(d.message);
+            if (d.tweets_found) setTweets(d.tweets_found);
+            const pm = d.message?.match(/page (\d+)/i);
+            if (pm) setPages(parseInt(pm[1]));
+            if (d.step === 'error') { es.close(); setError(d.error); setScreen('error'); }
+            if (d.step === 'complete') { es.close(); setProgress(100); setMsg('Done! 🎉'); setTimeout(() => { setStats(d.stats); setUser(d.user); setScreen('story'); }, 250); }
+          } catch {}
+        };
+        es.onerror = () => { clearTimeout(to); es.close(); if (!sseOk) fallback(h); };
+      };
+
+      const fallback = async (h) => {
+        const start = Date.now();
+        const iv = setInterval(() => {
+          const el = Date.now() - start;
+          const p = Math.min(Math.floor((el / 120000) * 95), 95);
+          setProgress(p);
+          setPages(Math.floor(p / 2));
+          if (p < 20) setMsg('Fetching profile...');
+          else if (p < 50) setMsg('Scanning tweets...');
+          else if (p < 80) setMsg('Finding BULK mentions...');
+          else setMsg('Almost done...');
+        }, 800);
 
         try {
-          const response = await fetch(`${API_URL}/api/wrapped`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ handle: inputHandle })
-          });
-
-          clearInterval(progressInterval);
-          
-          const data = await response.json();
-          
-          if (!response.ok) {
-            throw new Error(data.error || 'Failed to fetch data');
-          }
-
-          setProgress(100);
-          setLoadingMessage('Done!');
-          
-          setTimeout(() => {
-            setStats(data.stats);
-            setUser(data.user);
-            setTimeline(data.timeline || []);
-            setScreen('story');
-          }, 400);
-          
-        } catch (err) {
-          clearInterval(progressInterval);
-          setError(err.message);
-          setScreen('error');
-        }
+          const r = await fetch(`${API_URL}/api/wrapped`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ handle: h }) });
+          clearInterval(iv);
+          const d = await r.json();
+          if (!r.ok) throw new Error(d.error || 'Failed');
+          setProgress(100); setMsg('Done! 🎉');
+          setTimeout(() => { setStats(d.stats); setUser(d.user); setScreen('story'); }, 300);
+        } catch (e) { clearInterval(iv); setError(e.message); setScreen('error'); }
       };
 
-      const handleRestart = () => {
-        setScreen('landing');
-        setHandle('');
-        setStats(null);
-        setUser(null);
-        setTimeline(null);
-        setProgress(0);
-      };
+      const restart = () => { setScreen('landing'); setHandle(''); setStats(null); setUser(null); setProgress(0); };
 
       return (
         <AnimatePresence mode="wait">
-          {screen === 'landing' && <LandingPage key="landing" onSubmit={handleSubmit} />}
-          {screen === 'loading' && <LoadingScreen key="loading" handle={handle} progress={progress} message={loadingMessage} />}
-          {screen === 'story' && stats && <StoryView key="story" stats={stats} handle={handle} user={user} timeline={timeline} onRestart={handleRestart} />}
-          {screen === 'error' && <ErrorScreen key="error" message={error} onRetry={handleRestart} />}
+          {screen === 'landing' && <LandingPage key="l" onSubmit={submit} />}
+          {screen === 'loading' && <LoadingScreen key="lo" handle={handle} progress={progress} message={msg} pagesScanned={pages} tweetsFound={tweets} />}
+          {screen === 'story' && stats && <StoryView key="s" stats={stats} handle={handle} user={user} onRestart={restart} />}
+          {screen === 'error' && <ErrorScreen key="e" message={error} onRetry={restart} />}
         </AnimatePresence>
       );
     }
