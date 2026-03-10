@@ -275,7 +275,7 @@
     .tweet-stat { display: flex; align-items: center; gap: 0.4rem; }
     .tweet-stat svg { width: 16px; height: 16px; }
 
-    /* Timeline Strip - Dot based */
+    /* Timeline Strip - Minimalistic */
     .timeline-strip {
       width: 100%;
       max-width: 420px;
@@ -286,26 +286,12 @@
       border: 1px solid #222;
     }
 
-    .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
     .timeline-title { font-size: 0.7rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
     .timeline-date-range { font-size: 0.6rem; color: var(--text-dim); }
 
-    .timeline-track { position: relative; height: 50px; display: flex; align-items: center; }
-    .timeline-line-bg { position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: #222; transform: translateY(-50%); }
-    .timeline-line-progress { position: absolute; top: 50%; left: 0; height: 2px; background: var(--gradient-1); transform: translateY(-50%); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
-
-    .timeline-dots { position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%); display: flex; justify-content: space-between; }
-
-    .timeline-dot-wrapper { display: flex; flex-direction: column; align-items: center; }
-    .timeline-dot { width: 18px; height: 18px; border-radius: 50%; background: #1a1a1a; border: 2px solid #333; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 9px; cursor: pointer; }
-    .timeline-dot.passed { background: #1a3d2a; border-color: var(--accent); }
-    .timeline-dot.active { background: var(--accent); border-color: #fff; box-shadow: 0 0 12px var(--accent); transform: scale(1.3); }
-    .timeline-dot-label { position: absolute; top: 28px; font-size: 0.55rem; color: var(--text-dim); white-space: nowrap; opacity: 0; transition: opacity 0.3s; }
-    .timeline-dot-wrapper.active .timeline-dot-label { opacity: 1; color: var(--accent); }
-
-    .timeline-current { text-align: center; margin-top: 0.5rem; padding-top: 0.4rem; border-top: 1px solid #1a1a1a; }
-    .timeline-current-title { font-size: 0.75rem; font-weight: 600; color: var(--text); }
-    .timeline-current-date { font-size: 0.6rem; color: var(--accent); margin-top: 0.1rem; }
+    .timeline-track { position: relative; height: 6px; border-radius: 3px; background: #222; overflow: hidden; }
+    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: var(--gradient-1); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(0, 255, 136, 0.4); border-radius: 3px; }
 
     .progress-bar { display: flex; gap: 4px; margin-top: 1.5rem; width: 100%; max-width: 300px; }
 
@@ -534,40 +520,11 @@
     }
 
     function TimelineStrip({ stats, currentIndex, totalCards }) {
-      // Use posts_by_month data for the chart
-      const monthData = stats.posts_by_month || {};
-      const months = Object.keys(monthData).sort();
-      const chartData = months.slice(-6).map(m => ({
-        month: m,
-        posts: monthData[m] || 0
-      }));
-
-      // Calculate cumulative views per period (estimate based on total / periods)
-      const totalPosts = stats.total_posts || 1;
-      const totalViews = stats.total_views || 0;
-      const totalLikes = stats.total_likes || 0;
-      const avgViewsPerPost = totalViews / totalPosts;
-      const avgLikesPerPost = totalLikes / totalPosts;
-
-      const maxPosts = Math.max(...chartData.map(d => d.posts), 1);
-
-      const dots = [
-        { id: 'first', label: 'First Post', emoji: '🚀', cardIdx: 1 },
-        { id: 'viral', label: 'Viral', emoji: '🔥', cardIdx: 6 },
-        { id: 'liked', label: 'Loved', emoji: '❤️', cardIdx: 7 },
-        { id: 'now', label: 'Summary', emoji: '⭐', cardIdx: totalCards - 1 }
-      ].filter(d => {
-        if (d.id === 'viral') return !!stats.most_viral_post;
-        if (d.id === 'liked') return stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text;
-        return true;
-      });
-
-      let activeIdx = 0;
-      for (let i = dots.length - 1; i >= 0; i--) {
-        if (currentIndex >= dots[i].cardIdx) { activeIdx = i; break; }
-      }
-      const progressWidth = dots.length > 1 ? (activeIdx / (dots.length - 1)) * 100 : 0;
-      const current = dots[activeIdx];
+      // Calculate cumulative stats based on current card index
+      const progress = (currentIndex + 1) / totalCards;
+      const currentPosts = Math.round((stats.total_posts || 0) * progress);
+      const currentViews = Math.round((stats.total_views || 0) * progress);
+      const currentLikes = Math.round((stats.total_likes || 0) * progress);
 
       return (
         <motion.div className="timeline-strip" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
@@ -576,77 +533,51 @@
             <span className="timeline-date-range">{stats.first_post_date} → Now</span>
           </div>
 
-          {/* Mini chart showing posts by month */}
-          {chartData.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '40px', marginBottom: '0.5rem', padding: '0 0.5rem' }}>
-              {chartData.map((d, i) => (
-                <motion.div
-                  key={d.month}
-                  initial={{ height: 0 }}
-                  animate={{ height: `${Math.max((d.posts / maxPosts) * 100, 10)}%` }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                  style={{
-                    flex: 1,
-                    background: 'linear-gradient(to top, #00ff88, #00d4ff)',
-                    borderRadius: '3px 3px 0 0',
-                    position: 'relative',
-                    minHeight: '4px'
-                  }}
-                  title={`${d.month}: ${d.posts} posts`}
-                >
-                  <span style={{
-                    position: 'absolute',
-                    bottom: '-16px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    fontSize: '0.45rem',
-                    color: '#666',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    {d.month.split('-')[1]}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          )}
-
-          {/* Stats summary */}
-          <div style={{ display: 'flex', justifyContent: 'space-around', padding: '0.4rem 0', marginTop: '1rem', borderTop: '1px solid #222' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#00ff88' }}>{formatNumber(stats.total_posts)}</div>
-              <div style={{ fontSize: '0.5rem', color: '#666', textTransform: 'uppercase' }}>Posts</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#00d4ff' }}>{formatNumber(stats.total_views)}</div>
-              <div style={{ fontSize: '0.5rem', color: '#666', textTransform: 'uppercase' }}>Views</div>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ff6b6b' }}>{formatNumber(stats.total_likes)}</div>
-              <div style={{ fontSize: '0.5rem', color: '#666', textTransform: 'uppercase' }}>Likes</div>
-            </div>
+          {/* Simple progress bar */}
+          <div className="timeline-track">
+            <motion.div 
+              className="timeline-line-progress" 
+              animate={{ width: `${progress * 100}%` }} 
+              transition={{ duration: 0.4 }} 
+            />
           </div>
 
-          {/* Dot progress */}
-          <div className="timeline-track" style={{ marginTop: '0.5rem' }}>
-            <div className="timeline-line-bg" />
-            <motion.div className="timeline-line-progress" animate={{ width: `${progressWidth}%` }} transition={{ duration: 0.4 }} />
-            <div className="timeline-dots">
-              {dots.map((dot, i) => (
-                <div key={dot.id} className={`timeline-dot-wrapper ${i === activeIdx ? 'active' : ''}`}>
-                  <motion.div 
-                    className={`timeline-dot ${i < activeIdx ? 'passed' : ''} ${i === activeIdx ? 'active' : ''}`}
-                    animate={i === activeIdx ? { scale: [1, 1.15, 1] } : {}}
-                    transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 1.5 }}
-                  >{dot.emoji}</motion.div>
-                  <span className="timeline-dot-label">{dot.label}</span>
-                </div>
-              ))}
+          {/* Cumulative stats that increase as you go through cards */}
+          <div style={{ display: 'flex', justifyContent: 'space-around', padding: '0.5rem 0', marginTop: '0.5rem' }}>
+            <div style={{ textAlign: 'center' }}>
+              <motion.div 
+                key={currentPosts}
+                initial={{ scale: 1.2 }}
+                animate={{ scale: 1 }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#00ff88' }}
+              >
+                {formatNumber(currentPosts)}
+              </motion.div>
+              <div style={{ fontSize: '0.55rem', color: '#666', textTransform: 'uppercase' }}>Posts</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <motion.div 
+                key={currentViews}
+                initial={{ scale: 1.2 }}
+                animate={{ scale: 1 }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#00d4ff' }}
+              >
+                {formatNumber(currentViews)}
+              </motion.div>
+              <div style={{ fontSize: '0.55rem', color: '#666', textTransform: 'uppercase' }}>Views</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <motion.div 
+                key={currentLikes}
+                initial={{ scale: 1.2 }}
+                animate={{ scale: 1 }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#ff6b6b' }}
+              >
+                {formatNumber(currentLikes)}
+              </motion.div>
+              <div style={{ fontSize: '0.55rem', color: '#666', textTransform: 'uppercase' }}>Likes</div>
             </div>
           </div>
-
-          <motion.div className="timeline-current" key={activeIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <div className="timeline-current-title">{current.emoji} {current.label}</div>
-          </motion.div>
         </motion.div>
       );
     }
@@ -840,12 +771,26 @@
         setHandle(inputHandle);
         setScreen('loading');
         setProgress(0);
-        setLoadingMessage('Connecting...');
+        setLoadingMessage('Scanning your timeline...');
+
+        // Rotating messages for frontend
+        const messages = [
+          'Scanning your timeline...',
+          'Finding BULK mentions...',
+          'Looking for gBULK posts...',
+          'Calculating your impact...',
+          'Preparing your wrapped...'
+        ];
+        let msgIdx = 0;
+        const msgInterval = setInterval(() => {
+          msgIdx = (msgIdx + 1) % messages.length;
+          setLoadingMessage(messages[msgIdx]);
+        }, 2500);
 
         // Try SSE first for real progress
         let sseWorking = false;
         const es = new EventSource(`${API_URL}/api/wrapped/stream?handle=${encodeURIComponent(inputHandle)}`);
-        const timeout = setTimeout(() => { if (!sseWorking) { es.close(); fallbackFetch(inputHandle); } }, 5000);
+        const timeout = setTimeout(() => { if (!sseWorking) { es.close(); clearInterval(msgInterval); fallbackFetch(inputHandle); } }, 5000);
 
         es.onmessage = (event) => {
           sseWorking = true;
@@ -853,10 +798,11 @@
           try {
             const data = JSON.parse(event.data);
             if (data.progress) setProgress(data.progress);
-            if (data.message) setLoadingMessage(data.message);
-            if (data.step === 'error') { es.close(); setError(data.error); setScreen('error'); }
+            // Don't use data.message - use our rotating messages instead
+            if (data.step === 'error') { es.close(); clearInterval(msgInterval); setError(data.error); setScreen('error'); }
             if (data.step === 'complete') {
               es.close();
+              clearInterval(msgInterval);
               setProgress(100);
               setLoadingMessage('Done! 🎉');
               setTimeout(() => { setStats(data.stats); setUser(data.user); setScreen('story'); }, 250);
@@ -864,7 +810,7 @@
           } catch (e) {}
         };
 
-        es.onerror = () => { clearTimeout(timeout); es.close(); if (!sseWorking) fallbackFetch(inputHandle); };
+        es.onerror = () => { clearTimeout(timeout); es.close(); clearInterval(msgInterval); if (!sseWorking) fallbackFetch(inputHandle); };
       };
 
       const fallbackFetch = async (inputHandle) => {
@@ -877,23 +823,33 @@
           'Preparing your wrapped...'
         ];
         let msgIdx = 0;
-        const iv = setInterval(() => {
+        
+        const msgInterval = setInterval(() => {
+          msgIdx = (msgIdx + 1) % messages.length;
+          setLoadingMessage(messages[msgIdx]);
+        }, 2500);
+        
+        const progressInterval = setInterval(() => {
           const elapsed = Date.now() - start;
           const p = Math.min(Math.floor((elapsed / 120000) * 95), 95);
           setProgress(p);
-          msgIdx = Math.min(Math.floor(p / 20), messages.length - 1);
-          setLoadingMessage(messages[msgIdx]);
         }, 800);
 
         try {
           const r = await fetch(`${API_URL}/api/wrapped`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ handle: inputHandle }) });
-          clearInterval(iv);
+          clearInterval(msgInterval);
+          clearInterval(progressInterval);
           const d = await r.json();
           if (!r.ok) throw new Error(d.error || 'Failed');
           setProgress(100);
           setLoadingMessage('Done! 🎉');
           setTimeout(() => { setStats(d.stats); setUser(d.user); setScreen('story'); }, 300);
-        } catch (e) { clearInterval(iv); setError(e.message); setScreen('error'); }
+        } catch (e) { 
+          clearInterval(msgInterval); 
+          clearInterval(progressInterval); 
+          setError(e.message); 
+          setScreen('error'); 
+        }
       };
 
       const handleRestart = () => { setScreen('landing'); setHandle(''); setStats(null); setUser(null); setProgress(0); };
