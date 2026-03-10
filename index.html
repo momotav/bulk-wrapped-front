@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
       /* BULK Brand - Primary Dark Palette */
       --bulk-base: #141310;
@@ -23,27 +22,28 @@
       --text-dim: #C6B6BA;
       --text-muted: #736A6C;
       
-      /* Accents */
+      /* Primary Accent - WHITE */
       --accent: #FFFEEF;
-      --accent-gold: #FFB547;
-      --accent-gold-dim: rgba(255, 181, 71, 0.15);
+      --accent-glow: rgba(255, 254, 239, 0.2);
       
-      /* Secondary - Market Colors */
+      /* Secondary Accents */
+      --gold: #FFB547;
+      --gold-dim: rgba(255, 181, 71, 0.15);
+      
+      /* Market Colors - EQUAL usage */
       --green: #00B481;
       --green-secondary: #134A55;
       --green-glow: rgba(0, 180, 129, 0.4);
       --red: #EF4A3C;
       --red-secondary: #6E1742;
+      --red-glow: rgba(239, 74, 60, 0.4);
       
       /* Gradients */
+      --gradient-white: linear-gradient(135deg, #FFFEEF 0%, #C6B6BA 100%);
       --gradient-green: linear-gradient(135deg, #00B481 0%, #134A55 100%);
+      --gradient-red: linear-gradient(135deg, #EF4A3C 0%, #6E1742 100%);
       --gradient-gold: linear-gradient(135deg, #FFB547 0%, #C68A2E 100%);
-      --gradient-1: linear-gradient(135deg, #FFFEEF 0%, #C6B6BA 100%);
-      --gradient-2: linear-gradient(135deg, #544A4C 0%, #3B3435 100%);
-      --gradient-3: linear-gradient(135deg, #EF4A3C 0%, #6E1742 100%);
-      --gradient-4: linear-gradient(135deg, #00B481 0%, #134A55 100%);
     }
-
     body {
       font-family: 'Outfit', -apple-system, sans-serif;
       background: linear-gradient(180deg, #141310 0%, #211F1B 50%, #141310 100%);
@@ -53,8 +53,7 @@
       overflow-x: hidden;
       position: relative;
     }
-
-    /* Falling Stars Background - matches BulkGram leaderboard */
+    /* Falling Stars Background */
     .stars-container {
       position: fixed;
       top: 0;
@@ -65,71 +64,51 @@
       overflow: hidden;
       z-index: 0;
     }
-
     .star {
       position: absolute;
       width: 20px;
       height: 20px;
-      background-image: url('assets/star.png');
+      background: url('assets/star.png') no-repeat center center;
       background-size: contain;
-      background-repeat: no-repeat;
-      opacity: 0.5;
-      filter: drop-shadow(0 0 4px rgba(255, 181, 71, 0.4));
-      animation: fallAndRotate linear infinite;
-    }
-
-    /* Fallback if image doesn't load */
-    .star::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, rgba(255, 181, 71, 0.8) 0%, rgba(255, 181, 71, 0) 70%);
-      border-radius: 50%;
       opacity: 0;
+      animation: starFall linear infinite;
     }
-
     .star.reverse {
-      animation: fallAndRotateReverse linear infinite;
+      animation-name: starFallReverse;
     }
-
-    @keyframes fallAndRotate {
+    @keyframes starFall {
       0% {
-        transform: translateY(-100px) translateX(0px) rotate(0deg);
+        opacity: 0;
+        transform: translateY(-50px) translateX(0) rotate(0deg);
       }
-      25% {
-        transform: translateY(calc(25vh)) translateX(20px) rotate(90deg);
+      5% {
+        opacity: 0.6;
       }
-      50% {
-        transform: translateY(calc(50vh)) translateX(-15px) rotate(180deg);
-      }
-      75% {
-        transform: translateY(calc(75vh)) translateX(25px) rotate(270deg);
+      95% {
+        opacity: 0.6;
       }
       100% {
-        transform: translateY(calc(100vh + 100px)) translateX(0px) rotate(360deg);
+        opacity: 0;
+        transform: translateY(calc(100vh + 50px)) translateX(30px) rotate(360deg);
       }
     }
-
-    @keyframes fallAndRotateReverse {
+    @keyframes starFallReverse {
       0% {
-        transform: translateY(-100px) translateX(0px) rotate(360deg);
+        opacity: 0;
+        transform: translateY(-50px) translateX(0) rotate(360deg);
       }
-      25% {
-        transform: translateY(calc(25vh)) translateX(-20px) rotate(270deg);
+      5% {
+        opacity: 0.6;
       }
-      50% {
-        transform: translateY(calc(50vh)) translateX(15px) rotate(180deg);
-      }
-      75% {
-        transform: translateY(calc(75vh)) translateX(-25px) rotate(90deg);
+      95% {
+        opacity: 0.6;
       }
       100% {
-        transform: translateY(calc(100vh + 100px)) translateX(0px) rotate(0deg);
+        opacity: 0;
+        transform: translateY(calc(100vh + 50px)) translateX(-30px) rotate(0deg);
       }
     }
-
     #root { min-height: 100vh; position: relative; z-index: 1; }
-
     .landing {
       min-height: 100vh;
       display: flex;
@@ -139,20 +118,16 @@
       padding: 2rem;
       text-align: center;
     }
-
     .logo {
       font-size: 3rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      background: var(--gradient-gold);
+      background: var(--gradient-white);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
     .tagline { color: var(--text-dim); font-size: 1.1rem; margin-bottom: 3rem; }
-
     .input-container { display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 400px; }
-
     .handle-input {
       background: var(--bg-elevated);
       border: 2px solid var(--border);
@@ -164,12 +139,10 @@
       text-align: center;
       transition: all 0.3s;
     }
-
-    .handle-input:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255, 181, 71, 0.15); }
+    .handle-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
     .handle-input::placeholder { color: var(--text-dim); }
-
     .generate-btn {
-      background: var(--gradient-gold);
+      background: var(--accent);
       border: none;
       border-radius: 16px;
       padding: 1.25rem 2rem;
@@ -179,12 +152,10 @@
       cursor: pointer;
       transition: all 0.2s;
       font-family: inherit;
-      box-shadow: 0 4px 20px rgba(255, 181, 71, 0.2);
+      box-shadow: 0 4px 20px var(--accent-glow);
     }
-
-    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(255, 181, 71, 0.3); }
+    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(255, 254, 239, 0.25); }
     .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
     .loading-screen {
       min-height: 100vh;
       display: flex;
@@ -194,11 +165,8 @@
       padding: 2rem;
       text-align: center;
     }
-
-    .loading-handle { font-size: 2rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 2rem; }
-
+    .loading-handle { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 2rem; }
     .progress-container { width: 100%; max-width: 350px; margin-bottom: 2rem; }
-
     .progress-bar-bg {
       width: 100%;
       height: 8px;
@@ -207,36 +175,30 @@
       overflow: hidden;
       margin-bottom: 1rem;
     }
-
     .progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--green) 0%, var(--green-secondary) 100%);
+      background: var(--gradient-white);
       border-radius: 10px;
       transition: width 0.3s ease;
-      box-shadow: 0 0 15px var(--green-glow);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
-
     .progress-percentage {
       font-size: 2.5rem;
       font-weight: 800;
-      color: var(--green);
+      color: var(--accent);
       margin-bottom: 0.5rem;
     }
-
     .progress-message { color: var(--text-dim); font-size: 1rem; min-height: 24px; }
-
     .loading-spinner {
       width: 24px;
       height: 24px;
       border: 3px solid rgba(84, 74, 76, 0.4);
-      border-top-color: var(--green);
+      border-top-color: var(--accent);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-top: 1.5rem;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .story-container {
       min-height: 100vh;
       display: flex;
@@ -246,7 +208,6 @@
       padding: 1rem;
       position: relative;
     }
-
     .card-wrapper {
       width: 100%;
       max-width: 420px;
@@ -255,7 +216,6 @@
       position: relative;
       perspective: 1000px;
     }
-
     .story-card {
       position: absolute;
       inset: 0;
@@ -270,7 +230,6 @@
       border: 1px solid var(--border);
       overflow: hidden;
     }
-
     .card-gradient {
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -279,7 +238,6 @@
       z-index: 0;
       filter: blur(40px);
     }
-
     .card-content {
       position: relative;
       z-index: 1;
@@ -290,7 +248,6 @@
       height: 100%;
       width: 100%;
     }
-
     .card-number {
       position: absolute;
       top: 1rem; right: 1rem;
@@ -300,34 +257,25 @@
       padding: 0.3rem 0.6rem;
       border-radius: 20px;
     }
-
     .card-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem; }
-
     .card-value { font-size: 4rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1; color: var(--accent); }
-    .card-value.gradient { color: var(--accent); }
-    .card-value.gradient-2 { color: var(--accent); opacity: 0.9; }
-    .card-value.gradient-3 { color: var(--accent); opacity: 0.85; }
-    .card-value.gradient-4 { color: var(--accent); opacity: 0.8; }
     .card-value.small { font-size: 2rem; }
-
     .card-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
     .card-subtitle { font-size: 0.95rem; color: var(--text-dim); max-width: 85%; line-height: 1.4; }
-
     .profile-pic {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      border: 4px solid var(--accent-gold);
+      border: 4px solid var(--accent);
       object-fit: cover;
       margin-bottom: 1.5rem;
-      box-shadow: 0 0 30px rgba(255, 181, 71, 0.25);
+      box-shadow: 0 0 30px var(--accent-glow);
     }
-
     .profile-pic-placeholder {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      border: 4px solid var(--accent-gold);
+      border: 4px solid var(--accent);
       background: var(--bg-elevated);
       display: flex;
       align-items: center;
@@ -335,7 +283,6 @@
       font-size: 3rem;
       margin-bottom: 1.5rem;
     }
-
     .tweet-preview {
       background: var(--bg-elevated);
       border-radius: 12px;
@@ -345,7 +292,6 @@
       border: 1px solid var(--border);
       overflow: hidden;
     }
-
     .tweet-media {
       width: 100%;
       max-height: 280px;
@@ -353,10 +299,8 @@
       border-bottom: 1px solid var(--border);
       background: var(--bg-card);
     }
-
     .tweet-body { padding: 0.6rem; }
-    .tweet-date { font-size: 0.65rem; color: var(--accent-gold); margin-bottom: 0.25rem; }
-
+    .tweet-date { font-size: 0.65rem; color: var(--text-dim); margin-bottom: 0.25rem; }
     .tweet-text {
       font-size: 0.75rem;
       line-height: 1.4;
@@ -367,12 +311,10 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-
     .tweet-stats { display: flex; gap: 1rem; font-size: 0.7rem; color: var(--text-dim); }
     .tweet-stat { display: flex; align-items: center; gap: 0.25rem; }
     .tweet-stat svg { width: 12px; height: 12px; }
-
-    /* Timeline Strip - Minimalistic */
+    /* Timeline Strip */
     .timeline-strip {
       width: 100%;
       max-width: 420px;
@@ -382,16 +324,12 @@
       border-radius: 14px;
       border: 1px solid var(--border);
     }
-
     .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
-    .timeline-title { font-size: 0.7rem; font-weight: 600; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; }
+    .timeline-title { font-size: 0.7rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
     .timeline-date-range { font-size: 0.6rem; color: var(--text-dim); }
-
     .timeline-track { position: relative; height: 6px; border-radius: 3px; background: rgba(84, 74, 76, 0.4); overflow: hidden; }
-    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--green) 0%, var(--green-secondary) 100%); transition: width 0.5s ease; box-shadow: 0 0 12px var(--green-glow); border-radius: 3px; }
-
+    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: var(--gradient-white); transition: width 0.5s ease; box-shadow: 0 0 12px var(--accent-glow); border-radius: 3px; }
     .progress-bar { display: flex; gap: 4px; margin-top: 1.5rem; width: 100%; max-width: 300px; }
-
     .progress-segment {
       flex: 1;
       height: 3px;
@@ -400,10 +338,8 @@
       overflow: hidden;
       cursor: pointer;
     }
-
-    .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.3s ease; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
     .progress-segment.completed .progress-fill, .progress-segment.active .progress-fill { width: 100%; }
-
     .nav-buttons { 
       position: absolute;
       top: 50%;
@@ -415,7 +351,6 @@
       pointer-events: none;
       z-index: 10;
     }
-
     .nav-btn {
       background: rgba(20, 19, 16, 0.95);
       border: 1px solid var(--border);
@@ -427,22 +362,19 @@
       color: var(--text);
       pointer-events: auto;
     }
-
-    .nav-btn:hover { background: var(--bg-elevated); border-color: var(--accent-gold); color: var(--accent-gold); }
+    .nav-btn:hover { background: var(--bg-elevated); border-color: var(--accent); color: var(--accent); }
     .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
     .nav-btn svg { width: 16px; height: 16px; }
-
     .final-logo {
       font-size: 2rem;
       font-weight: 700;
-      background: var(--gradient-gold);
+      background: var(--gradient-white);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 2rem;
     }
-
     .share-btn {
-      background: var(--gradient-gold);
+      background: var(--accent);
       border: none;
       border-radius: 12px;
       padding: 1rem 2rem;
@@ -453,11 +385,9 @@
       display: flex; align-items: center; gap: 0.5rem;
       margin-top: 2rem;
       font-family: inherit;
-      box-shadow: 0 4px 20px rgba(255, 181, 71, 0.25);
+      box-shadow: 0 4px 20px var(--accent-glow);
     }
-
-    .share-btn:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 181, 71, 0.35); }
-
+    .share-btn:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 254, 239, 0.3); }
     .restart-btn {
       background: transparent;
       border: 1px solid var(--border);
@@ -469,9 +399,7 @@
       margin-top: 1rem;
       font-family: inherit;
     }
-
-    .restart-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
-
+    .restart-btn:hover { border-color: var(--accent); color: var(--accent); }
     .error-screen {
       min-height: 100vh;
       display: flex;
@@ -481,21 +409,17 @@
       padding: 2rem;
       text-align: center;
     }
-
-    .error-icon { font-size: 4rem; margin-bottom: 1rem; width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; color: var(--bulk-base); font-weight: 700; }
+    .error-icon { font-size: 4rem; margin-bottom: 1rem; width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-red); display: flex; align-items: center; justify-content: center; color: var(--text); font-weight: 700; }
     .error-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
     .error-message { color: var(--text-dim); margin-bottom: 2rem; max-width: 300px; }
-
     .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; margin-top: 1.5rem; }
     .summary-item { background: var(--bg-elevated); border-radius: 12px; padding: 1.25rem 1rem; text-align: center; border: 1px solid rgba(84, 74, 76, 0.4); }
-    .summary-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); }
+    .summary-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
     .summary-item:nth-child(2) .summary-value { color: var(--green); }
-    .summary-item:nth-child(3) .summary-value { color: var(--accent-gold); }
+    .summary-item:nth-child(3) .summary-value { color: var(--red); }
     .summary-label { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 1px; }
-
     .glow { animation: glow 2s ease-in-out infinite alternate; }
-    @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(255, 181, 71, 0.3)); } to { filter: drop-shadow(0 0 30px rgba(255, 181, 71, 0.6)); } }
-
+    @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(255, 254, 239, 0.3)); } to { filter: drop-shadow(0 0 30px rgba(255, 254, 239, 0.5)); } }
     @media (max-width: 500px) {
       .logo { font-size: 2.5rem; }
       .card-value { font-size: 3rem; }
@@ -511,45 +435,44 @@
 <body>
   <!-- Falling Stars Background -->
   <div class="stars-container" id="stars"></div>
-
   <div id="root"></div>
-
   <script>
-    // Generate falling stars
+    // Generate falling stars - fixed animation
     (function() {
       const container = document.getElementById('stars');
-      const starCount = 20;
+      const starCount = 25;
       
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star' + (Math.random() > 0.5 ? ' reverse' : '');
         
-        // Random position, size, opacity, and animation duration
+        // Random horizontal position
         star.style.left = Math.random() * 100 + '%';
-        const size = 14 + Math.random() * 18;
+        
+        // Random size between 12-28px
+        const size = 12 + Math.random() * 16;
         star.style.width = size + 'px';
         star.style.height = size + 'px';
-        star.style.opacity = 0.3 + Math.random() * 0.4;
-        star.style.animationDuration = (10 + Math.random() * 15) + 's';
-        // First 5 stars appear immediately, rest are staggered
-        star.style.animationDelay = i < 5 ? (i * 0.5) + 's' : (Math.random() * 8) + 's';
+        
+        // Animation duration between 12-25 seconds
+        star.style.animationDuration = (12 + Math.random() * 13) + 's';
+        
+        // Stagger the start - some start immediately, others delayed
+        star.style.animationDelay = (Math.random() * 15) + 's';
         
         container.appendChild(star);
       }
     })();
   </script>
-
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-
   <script type="text/babel">
     const { useState, useEffect } = React;
     const { motion, AnimatePresence } = Motion;
-
     const API_URL = 'https://bulk-wrapped-api-production.up.railway.app';
-
+    
     function formatNumber(num) {
       if (!num && num !== 0) return '0';
       num = Number(num);
@@ -564,7 +487,7 @@
       }
       return String(num);
     }
-
+    
     function formatDate(dateStr) {
       if (!dateStr) return '';
       try {
@@ -572,12 +495,10 @@
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       } catch { return dateStr; }
     }
-
+    
     function AnimatedCounter({ value, duration = 2000 }) {
       const [displayValue, setDisplayValue] = useState(0);
-      // Parse raw number (value should be raw number now)
       const numericValue = Number(value) || 0;
-
       useEffect(() => {
         setDisplayValue(0);
         let startTime;
@@ -590,11 +511,9 @@
         };
         requestAnimationFrame(animate);
       }, [numericValue, duration]);
-
-      // Format at the end
       return <span>{formatNumber(displayValue)}</span>;
     }
-
+    
     function LandingPage({ onSubmit }) {
       const [handle, setHandle] = useState('');
       return (
@@ -608,7 +527,7 @@
         </motion.div>
       );
     }
-
+    
     function LoadingScreen({ handle, progress, message }) {
       return (
         <motion.div className="loading-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -624,7 +543,7 @@
         </motion.div>
       );
     }
-
+    
     function ErrorScreen({ message, onRetry }) {
       return (
         <motion.div className="error-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -635,7 +554,7 @@
         </motion.div>
       );
     }
-
+    
     function TweetPreview({ tweet }) {
       if (!tweet) return null;
       return (
@@ -658,125 +577,92 @@
         </div>
       );
     }
-
+    
     function TimelineStrip({ stats, currentIndex, totalCards }) {
-      // Calculate cumulative stats based on current card index
       const progress = (currentIndex + 1) / totalCards;
       const currentPosts = Math.round((stats.total_posts || 0) * progress);
       const currentViews = Math.round((stats.total_views || 0) * progress);
       const currentLikes = Math.round((stats.total_likes || 0) * progress);
-
-      // Calculate progressive date
+      
       const getProgressDate = () => {
         try {
           const firstDate = new Date(stats.first_post_date);
           const now = new Date();
           if (isNaN(firstDate.getTime())) return stats.first_post_date;
-          
           const totalMs = now.getTime() - firstDate.getTime();
           const currentMs = firstDate.getTime() + (totalMs * progress);
           const currentDate = new Date(currentMs);
-          
           return currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         } catch {
           return stats.first_post_date;
         }
       };
-
+      
       return (
         <motion.div className="timeline-strip" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
           <div className="timeline-header">
             <span className="timeline-title">Your Journey</span>
-            <motion.span 
-              className="timeline-date-range"
-              key={currentIndex}
-              initial={{ opacity: 0.5 }}
-              animate={{ opacity: 1 }}
-            >
+            <motion.span className="timeline-date-range" key={currentIndex} initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
               {getProgressDate()}
             </motion.span>
           </div>
-
-          {/* Simple progress bar */}
           <div className="timeline-track">
-            <motion.div 
-              className="timeline-line-progress" 
-              animate={{ width: `${progress * 100}%` }} 
-              transition={{ duration: 0.4 }} 
-            />
+            <motion.div className="timeline-line-progress" animate={{ width: `${progress * 100}%` }} transition={{ duration: 0.4 }} />
           </div>
-
-          {/* Cumulative stats that increase as you go through cards */}
           <div style={{ display: 'flex', justifyContent: 'space-around', padding: '0.5rem 0', marginTop: '0.5rem' }}>
             <div style={{ textAlign: 'center' }}>
-              <motion.div 
-                key={currentPosts}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEEF' }}
-              >
+              <motion.div key={currentPosts} initial={{ scale: 1.2 }} animate={{ scale: 1 }} style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEEF' }}>
                 {formatNumber(currentPosts)}
               </motion.div>
               <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Posts</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <motion.div 
-                key={currentViews}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#00B481' }}
-              >
+              <motion.div key={currentViews} initial={{ scale: 1.2 }} animate={{ scale: 1 }} style={{ fontSize: '1rem', fontWeight: '700', color: '#00B481' }}>
                 {formatNumber(currentViews)}
               </motion.div>
               <div style={{ fontSize: '0.55rem', color: '#00B481', textTransform: 'uppercase' }}>Views</div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <motion.div 
-                key={currentLikes}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFB547' }}
-              >
+              <motion.div key={currentLikes} initial={{ scale: 1.2 }} animate={{ scale: 1 }} style={{ fontSize: '1rem', fontWeight: '700', color: '#EF4A3C' }}>
                 {formatNumber(currentLikes)}
               </motion.div>
-              <div style={{ fontSize: '0.55rem', color: '#FFB547', textTransform: 'uppercase' }}>Likes</div>
+              <div style={{ fontSize: '0.55rem', color: '#EF4A3C', textTransform: 'uppercase' }}>Likes</div>
             </div>
           </div>
         </motion.div>
       );
     }
-
+    
     function StoryCard({ card, index, total }) {
-      // Theme-based styling from BULK brand guidelines
+      // Theme-based styling - WHITE primary, GREEN for views, RED for likes
       const themeStyles = {
         default: {
-          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(255, 254, 239, 0.12) 0%, transparent 60%)',
+          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(255, 254, 239, 0.15) 0%, transparent 60%)',
           valueColor: '#FFFEEF',
           labelColor: 'var(--text-dim)',
-          accentGlow: 'rgba(255, 254, 239, 0.15)'
+          accentGlow: 'rgba(255, 254, 239, 0.2)'
         },
         green: {
           bgGlow: 'radial-gradient(circle at 50% 0%, rgba(0, 180, 129, 0.25) 0%, rgba(19, 74, 85, 0.15) 50%, transparent 70%)',
           valueColor: '#00B481',
           labelColor: '#00B481',
-          accentGlow: 'rgba(0, 180, 129, 0.2)'
+          accentGlow: 'rgba(0, 180, 129, 0.25)'
         },
-        gold: {
-          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(255, 181, 71, 0.2) 0%, rgba(198, 138, 46, 0.1) 50%, transparent 70%)',
-          valueColor: '#FFB547',
-          labelColor: '#FFB547',
-          accentGlow: 'rgba(255, 181, 71, 0.15)'
+        red: {
+          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(239, 74, 60, 0.25) 0%, rgba(110, 23, 66, 0.15) 50%, transparent 70%)',
+          valueColor: '#EF4A3C',
+          labelColor: '#EF4A3C',
+          accentGlow: 'rgba(239, 74, 60, 0.25)'
         }
       };
-
       const theme = themeStyles[card.theme] || themeStyles.default;
-
+      
       return (
         <motion.div className="story-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
           <div className="card-gradient" style={{ background: theme.bgGlow }} />
           <div className="card-content">
             <span className="card-number">{index + 1}/{total}</span>
-
+            
             {card.type === 'intro' && (
               <>
                 <p className="card-label">YOUR BULK JOURNEY</p>
@@ -789,7 +675,7 @@
                 <p className="card-subtitle">Let's see how you've been supporting $BULK</p>
               </>
             )}
-
+            
             {card.type === 'first_post' && (
               <>
                 <p className="card-label" style={{ color: theme.labelColor }}>JOURNEY STARTED</p>
@@ -798,7 +684,7 @@
                 {card.tweet && <TweetPreview tweet={card.tweet} />}
               </>
             )}
-
+            
             {card.type === 'stat' && (
               <>
                 <p className="card-label" style={{ color: theme.labelColor }}>{card.label}</p>
@@ -808,7 +694,7 @@
                 <p className="card-subtitle">{card.subtitle}</p>
               </>
             )}
-
+            
             {card.type === 'tweet' && (
               <>
                 <p className="card-label" style={{ color: theme.labelColor }}>{card.label}</p>
@@ -816,7 +702,7 @@
                 {card.tweet && <TweetPreview tweet={card.tweet} />}
               </>
             )}
-
+            
             {card.type === 'final' && (
               <>
                 {card.profileImage && <img src={card.profileImage} alt="" className="profile-pic" style={{ width: '80px', height: '80px', marginBottom: '1rem' }} onError={(e) => e.target.style.display = 'none'} />}
@@ -848,12 +734,11 @@
         </motion.div>
       );
     }
-
+    
     function StoryView({ stats, handle, user, onRestart }) {
       const [currentIndex, setCurrentIndex] = useState(0);
       const profileImage = user?.profile_image || stats?.profile_image;
-
-      // Build first post tweet object with media
+      
       const firstTweet = stats.first_post ? { 
         text: stats.first_post.text, 
         date: stats.first_post.date, 
@@ -861,24 +746,25 @@
         views: 0,
         media: stats.first_post.media
       } : null;
-
+      
+      // Cards with balanced themes: WHITE primary, GREEN for views, RED for likes
       const cards = [
         { type: 'intro', handle, profileImage, theme: 'default' },
-        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet, theme: 'gold' },
+        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet, theme: 'default' },
         { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK', animate: true, theme: 'default' },
         { type: 'stat', label: 'TOTAL VIEWS', value: stats.total_views, subtitle: 'People saw your BULK content', animate: true, theme: 'green' },
-        { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true, theme: 'gold' },
+        { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true, theme: 'red' },
         { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK', theme: 'default' }
       ];
-
+      
       if (stats.most_viral_post) {
         cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post, theme: 'green' });
       }
-
+      
       if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
-        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post, theme: 'gold' });
+        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post, theme: 'red' });
       }
-
+      
       cards.push({
         type: 'final',
         handle,
@@ -891,10 +777,10 @@
           streak: stats.posting_streak
         }
       });
-
+      
       const goNext = () => { if (currentIndex < cards.length - 1) setCurrentIndex(currentIndex + 1); };
       const goPrev = () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
-
+      
       useEffect(() => {
         const handleKey = (e) => {
           if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goNext(); }
@@ -903,14 +789,13 @@
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
       }, [currentIndex]);
-
+      
       return (
         <motion.div className="story-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="card-wrapper" onClick={goNext} style={{ cursor: currentIndex < cards.length - 1 ? 'pointer' : 'default', position: 'relative' }}>
             <AnimatePresence mode="wait">
               <StoryCard key={currentIndex} card={cards[currentIndex]} index={currentIndex} total={cards.length} />
             </AnimatePresence>
-            
             <div className="nav-buttons">
               <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goPrev(); }} disabled={currentIndex === 0}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -920,9 +805,7 @@
               </button>
             </div>
           </div>
-
           <TimelineStrip stats={stats} currentIndex={currentIndex} totalCards={cards.length} />
-
           <div className="progress-bar">
             {cards.map((_, i) => (
               <div key={i} className={`progress-segment ${i < currentIndex ? 'completed' : ''} ${i === currentIndex ? 'active' : ''}`} onClick={() => setCurrentIndex(i)}>
@@ -930,14 +813,13 @@
               </div>
             ))}
           </div>
-
           {currentIndex === cards.length - 1 && (
             <button className="restart-btn" onClick={onRestart}>Try Another Handle</button>
           )}
         </motion.div>
       );
     }
-
+    
     function App() {
       const [screen, setScreen] = useState('landing');
       const [handle, setHandle] = useState('');
@@ -946,14 +828,13 @@
       const [error, setError] = useState('');
       const [progress, setProgress] = useState(0);
       const [loadingMessage, setLoadingMessage] = useState('Connecting...');
-
+      
       const handleSubmit = async (inputHandle) => {
         setHandle(inputHandle);
         setScreen('loading');
         setProgress(0);
         setLoadingMessage('Scanning your timeline...');
-
-        // Rotating messages for frontend
+        
         const messages = [
           'Scanning your timeline...',
           'Finding BULK mentions...',
@@ -966,19 +847,17 @@
           msgIdx = (msgIdx + 1) % messages.length;
           setLoadingMessage(messages[msgIdx]);
         }, 2500);
-
-        // Try SSE first for real progress
+        
         let sseWorking = false;
         const es = new EventSource(`${API_URL}/api/wrapped/stream?handle=${encodeURIComponent(inputHandle)}`);
         const timeout = setTimeout(() => { if (!sseWorking) { es.close(); clearInterval(msgInterval); fallbackFetch(inputHandle); } }, 5000);
-
+        
         es.onmessage = (event) => {
           sseWorking = true;
           clearTimeout(timeout);
           try {
             const data = JSON.parse(event.data);
             if (data.progress) setProgress(data.progress);
-            // Don't use data.message - use our rotating messages instead
             if (data.step === 'error') { es.close(); clearInterval(msgInterval); setError(data.error); setScreen('error'); }
             if (data.step === 'complete') {
               es.close();
@@ -989,10 +868,10 @@
             }
           } catch (e) {}
         };
-
+        
         es.onerror = () => { clearTimeout(timeout); es.close(); clearInterval(msgInterval); if (!sseWorking) fallbackFetch(inputHandle); };
       };
-
+      
       const fallbackFetch = async (inputHandle) => {
         const start = Date.now();
         const messages = [
@@ -1014,7 +893,7 @@
           const p = Math.min(Math.floor((elapsed / 120000) * 95), 95);
           setProgress(p);
         }, 800);
-
+        
         try {
           const r = await fetch(`${API_URL}/api/wrapped`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ handle: inputHandle }) });
           clearInterval(msgInterval);
@@ -1031,9 +910,9 @@
           setScreen('error'); 
         }
       };
-
+      
       const handleRestart = () => { setScreen('landing'); setHandle(''); setStats(null); setUser(null); setProgress(0); };
-
+      
       return (
         <AnimatePresence mode="wait">
           {screen === 'landing' && <LandingPage key="landing" onSubmit={handleSubmit} />}
@@ -1043,7 +922,7 @@
         </AnimatePresence>
       );
     }
-
+    
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
