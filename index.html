@@ -68,12 +68,18 @@
       position: absolute;
       width: 20px;
       height: 20px;
-      background-image: url('assets/star.png');
+      background-image: url('https://bulkgram.com/assets/star.png');
       background-size: contain;
       background-repeat: no-repeat;
       opacity: 0.4;
       filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.3));
       animation: fallAndRotate linear infinite;
+    }
+    /* Fallback if image doesn't load - shows a glowing dot */
+    .star.no-image {
+      background-image: none;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0) 70%);
+      border-radius: 50%;
     }
     .star.reverse {
       animation: fallAndRotateReverse linear infinite;
@@ -445,6 +451,16 @@
     (function() {
       const container = document.getElementById('stars');
       const starCount = 25;
+      
+      // Check if star image exists
+      const testImg = new Image();
+      testImg.src = 'https://bulkgram.com/assets/star.png';
+      
+      testImg.onerror = function() {
+        // Image failed to load - add fallback class to all stars
+        document.querySelectorAll('.star').forEach(s => s.classList.add('no-image'));
+        console.log('Star image not found, using CSS fallback');
+      };
       
       for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
