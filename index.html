@@ -4,38 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BULK Wrapped</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #1B1A13;
+      /* BULK Brand - Primary Dark Palette */
+      --bulk-base: #141310;
+      --bg: #1B1A14;
       --bg-card: #141310;
-      --bg-elevated: #1B1A13;
-      --border: rgb(79, 75, 75);
-      --border-hover: rgba(255, 254, 240, 1);
-      --text: #FFFEF0;
-      --text-dim: #8b8b96;
-      --text-muted: #5c5c66;
-      --accent: #FFFEF0;
-      --accent-dim: linear-gradient(135deg, #534B4C 0%, #453F41 50%, #3B3435 100%);
-      --accent-gradient: linear-gradient(135deg, #534B4C 0%, #453F41 50%, #3B3435 100%);
-      --gradient-1: linear-gradient(135deg, #FFFEF0 0%, #d4d4c4 100%);
-      --gradient-2: linear-gradient(135deg, #534B4C 0%, #453F41 100%);
-      --gradient-3: linear-gradient(135deg, #6b5b5c 0%, #534B4C 100%);
-      --gradient-4: linear-gradient(135deg, #453F41 0%, #3B3435 100%);
+      --bg-elevated: #1B1A14;
+      --bg-secondary: #544A4C;
+      --border: rgba(84, 74, 76, 0.6);
+      --border-hover: #FFFEEF;
+      
+      /* Text */
+      --text: #FFFEEF;
+      --text-dim: #C6B6BA;
+      --text-muted: #736A6C;
+      
+      /* Accents */
+      --accent: #FFFEEF;
+      --accent-gold: #FFB547;
+      --accent-gold-dim: rgba(255, 181, 71, 0.15);
+      
+      /* Secondary - Market Colors */
+      --green: #00B481;
+      --green-secondary: #134A55;
+      --green-glow: rgba(0, 180, 129, 0.4);
+      --red: #EF4A3C;
+      --red-secondary: #6E1742;
+      
+      /* Gradients */
+      --gradient-green: linear-gradient(135deg, #00B481 0%, #134A55 100%);
+      --gradient-gold: linear-gradient(135deg, #FFB547 0%, #C68A2E 100%);
+      --gradient-1: linear-gradient(135deg, #FFFEEF 0%, #C6B6BA 100%);
+      --gradient-2: linear-gradient(135deg, #544A4C 0%, #3B3435 100%);
+      --gradient-3: linear-gradient(135deg, #FFB547 0%, #C68A2E 100%);
+      --gradient-4: linear-gradient(135deg, #00B481 0%, #134A55 100%);
     }
 
     body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
+      font-family: 'Outfit', -apple-system, sans-serif;
+      background: linear-gradient(180deg, #141310 0%, #211F1B 50%, #141310 100%);
+      background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Falling Stars */
+    /* Falling Stars Background - matches BulkGram leaderboard */
     .stars-container {
       position: fixed;
       top: 0;
@@ -49,22 +68,67 @@
 
     .star {
       position: absolute;
-      width: 12px;
-      height: 12px;
-      background: url('assets/star.png') no-repeat center center;
+      width: 20px;
+      height: 20px;
+      background-image: url('assets/star.png');
       background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0.5;
+      filter: drop-shadow(0 0 4px rgba(255, 181, 71, 0.4));
+      animation: fallAndRotate linear infinite;
+    }
+
+    /* Fallback if image doesn't load */
+    .star::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255, 181, 71, 0.8) 0%, rgba(255, 181, 71, 0) 70%);
+      border-radius: 50%;
       opacity: 0;
-      animation: fall linear infinite;
     }
 
-    @keyframes fall {
-      0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.6; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    .star.reverse {
+      animation: fallAndRotateReverse linear infinite;
     }
 
-    #root { min-height: 100vh; }
+    @keyframes fallAndRotate {
+      0% {
+        transform: translateY(-100px) translateX(0px) rotate(0deg);
+      }
+      25% {
+        transform: translateY(calc(25vh)) translateX(20px) rotate(90deg);
+      }
+      50% {
+        transform: translateY(calc(50vh)) translateX(-15px) rotate(180deg);
+      }
+      75% {
+        transform: translateY(calc(75vh)) translateX(25px) rotate(270deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 100px)) translateX(0px) rotate(360deg);
+      }
+    }
+
+    @keyframes fallAndRotateReverse {
+      0% {
+        transform: translateY(-100px) translateX(0px) rotate(360deg);
+      }
+      25% {
+        transform: translateY(calc(25vh)) translateX(-20px) rotate(270deg);
+      }
+      50% {
+        transform: translateY(calc(50vh)) translateX(15px) rotate(180deg);
+      }
+      75% {
+        transform: translateY(calc(75vh)) translateX(-25px) rotate(90deg);
+      }
+      100% {
+        transform: translateY(calc(100vh + 100px)) translateX(0px) rotate(0deg);
+      }
+    }
+
+    #root { min-height: 100vh; position: relative; z-index: 1; }
 
     .landing {
       min-height: 100vh;
@@ -78,9 +142,9 @@
 
     .logo {
       font-size: 3rem;
-      font-weight: 900;
+      font-weight: 700;
       margin-bottom: 0.5rem;
-      background: var(--gradient-1);
+      background: var(--gradient-gold);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -101,23 +165,24 @@
       transition: all 0.3s;
     }
 
-    .handle-input:focus { outline: none; border-color: var(--border-hover); box-shadow: 0 0 20px rgba(255, 254, 240, 0.1); }
+    .handle-input:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 20px rgba(255, 181, 71, 0.15); }
     .handle-input::placeholder { color: var(--text-dim); }
 
     .generate-btn {
-      background: var(--accent);
+      background: var(--gradient-gold);
       border: none;
       border-radius: 16px;
       padding: 1.25rem 2rem;
       font-size: 1.1rem;
       font-weight: 700;
-      color: var(--bg);
+      color: var(--bulk-base);
       cursor: pointer;
       transition: all 0.2s;
       font-family: inherit;
+      box-shadow: 0 4px 20px rgba(255, 181, 71, 0.2);
     }
 
-    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(255, 254, 240, 0.15); }
+    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(255, 181, 71, 0.3); }
     .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .loading-screen {
@@ -130,14 +195,14 @@
       text-align: center;
     }
 
-    .loading-handle { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 2rem; }
+    .loading-handle { font-size: 2rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 2rem; }
 
     .progress-container { width: 100%; max-width: 350px; margin-bottom: 2rem; }
 
     .progress-bar-bg {
       width: 100%;
       height: 8px;
-      background: var(--bg-elevated);
+      background: rgba(84, 74, 76, 0.4);
       border-radius: 10px;
       overflow: hidden;
       margin-bottom: 1rem;
@@ -145,16 +210,16 @@
 
     .progress-bar-fill {
       height: 100%;
-      background: var(--accent);
+      background: linear-gradient(90deg, var(--green) 0%, var(--green-secondary) 100%);
       border-radius: 10px;
       transition: width 0.3s ease;
-      box-shadow: 0 0 15px rgba(255, 254, 240, 0.3);
+      box-shadow: 0 0 15px var(--green-glow);
     }
 
     .progress-percentage {
       font-size: 2.5rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--green);
       margin-bottom: 0.5rem;
     }
 
@@ -163,8 +228,8 @@
     .loading-spinner {
       width: 24px;
       height: 24px;
-      border: 3px solid var(--bg-elevated);
-      border-top-color: var(--accent);
+      border: 3px solid rgba(84, 74, 76, 0.4);
+      border-top-color: var(--green);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-top: 1.5rem;
@@ -238,7 +303,7 @@
 
     .card-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem; }
 
-    .card-value { font-size: 4rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1; color: var(--accent); }
+    .card-value { font-size: 4rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1; color: var(--accent); }
     .card-value.gradient { color: var(--accent); }
     .card-value.gradient-2 { color: var(--accent); opacity: 0.9; }
     .card-value.gradient-3 { color: var(--accent); opacity: 0.85; }
@@ -252,17 +317,17 @@
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      border: 4px solid var(--accent);
+      border: 4px solid var(--accent-gold);
       object-fit: cover;
       margin-bottom: 1.5rem;
-      box-shadow: 0 0 30px rgba(255, 254, 240, 0.2);
+      box-shadow: 0 0 30px rgba(255, 181, 71, 0.25);
     }
 
     .profile-pic-placeholder {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      border: 4px solid var(--accent);
+      border: 4px solid var(--accent-gold);
       background: var(--bg-elevated);
       display: flex;
       align-items: center;
@@ -290,7 +355,7 @@
     }
 
     .tweet-body { padding: 0.6rem; }
-    .tweet-date { font-size: 0.65rem; color: var(--accent); margin-bottom: 0.25rem; }
+    .tweet-date { font-size: 0.65rem; color: var(--accent-gold); margin-bottom: 0.25rem; }
 
     .tweet-text {
       font-size: 0.75rem;
@@ -319,11 +384,11 @@
     }
 
     .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
-    .timeline-title { font-size: 0.7rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+    .timeline-title { font-size: 0.7rem; font-weight: 600; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; }
     .timeline-date-range { font-size: 0.6rem; color: var(--text-dim); }
 
-    .timeline-track { position: relative; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
-    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(255, 254, 240, 0.3); border-radius: 3px; }
+    .timeline-track { position: relative; height: 6px; border-radius: 3px; background: rgba(84, 74, 76, 0.4); overflow: hidden; }
+    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--green) 0%, var(--green-secondary) 100%); transition: width 0.5s ease; box-shadow: 0 0 12px var(--green-glow); border-radius: 3px; }
 
     .progress-bar { display: flex; gap: 4px; margin-top: 1.5rem; width: 100%; max-width: 300px; }
 
@@ -331,12 +396,12 @@
       flex: 1;
       height: 3px;
       border-radius: 2px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(84, 74, 76, 0.4);
       overflow: hidden;
       cursor: pointer;
     }
 
-    .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; }
+    .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.3s ease; }
     .progress-segment.completed .progress-fill, .progress-segment.active .progress-fill { width: 100%; }
 
     .nav-buttons { 
@@ -352,8 +417,8 @@
     }
 
     .nav-btn {
-      background: rgba(17, 17, 17, 0.9);
-      border: 1px solid #333;
+      background: rgba(20, 19, 16, 0.95);
+      border: 1px solid var(--border);
       border-radius: 50%;
       width: 36px; height: 36px;
       display: flex; align-items: center; justify-content: center;
@@ -363,38 +428,39 @@
       pointer-events: auto;
     }
 
-    .nav-btn:hover { background: #222; border-color: var(--accent); color: var(--accent); }
+    .nav-btn:hover { background: var(--bg-elevated); border-color: var(--accent-gold); color: var(--accent-gold); }
     .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
     .nav-btn svg { width: 16px; height: 16px; }
 
     .final-logo {
       font-size: 2rem;
-      font-weight: 900;
-      background: var(--gradient-1);
+      font-weight: 700;
+      background: var(--gradient-gold);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 2rem;
     }
 
     .share-btn {
-      background: var(--gradient-1);
+      background: var(--gradient-gold);
       border: none;
       border-radius: 12px;
       padding: 1rem 2rem;
       font-size: 1rem;
       font-weight: 600;
-      color: #000;
+      color: var(--bulk-base);
       cursor: pointer;
       display: flex; align-items: center; gap: 0.5rem;
       margin-top: 2rem;
       font-family: inherit;
+      box-shadow: 0 4px 20px rgba(255, 181, 71, 0.25);
     }
 
-    .share-btn:hover { transform: scale(1.05); }
+    .share-btn:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 181, 71, 0.35); }
 
     .restart-btn {
       background: transparent;
-      border: 1px solid #333;
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1rem 2rem;
       font-size: 1rem;
@@ -404,7 +470,7 @@
       font-family: inherit;
     }
 
-    .restart-btn:hover { border-color: var(--text-dim); color: var(--text); }
+    .restart-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
 
     .error-screen {
       min-height: 100vh;
@@ -416,17 +482,19 @@
       text-align: center;
     }
 
-    .error-icon { font-size: 4rem; margin-bottom: 1rem; width: 80px; height: 80px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; color: var(--text); font-weight: 700; }
+    .error-icon { font-size: 4rem; margin-bottom: 1rem; width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-gold); display: flex; align-items: center; justify-content: center; color: var(--bulk-base); font-weight: 700; }
     .error-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
     .error-message { color: var(--text-dim); margin-bottom: 2rem; max-width: 300px; }
 
     .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; margin-top: 1.5rem; }
-    .summary-item { background: var(--bg-elevated); border-radius: 12px; padding: 1.25rem 1rem; text-align: center; border: 1px solid #222; }
-    .summary-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .summary-item { background: var(--bg-elevated); border-radius: 12px; padding: 1.25rem 1rem; text-align: center; border: 1px solid rgba(84, 74, 76, 0.4); }
+    .summary-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); }
+    .summary-item:nth-child(2) .summary-value { color: var(--green); }
+    .summary-item:nth-child(3) .summary-value { color: var(--accent-gold); }
     .summary-label { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 1px; }
 
     .glow { animation: glow 2s ease-in-out infinite alternate; }
-    @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(255,254,240,0.3)); } to { filter: drop-shadow(0 0 30px rgba(255,254,240,0.6)); } }
+    @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(255, 181, 71, 0.3)); } to { filter: drop-shadow(0 0 30px rgba(255, 181, 71, 0.6)); } }
 
     @media (max-width: 500px) {
       .logo { font-size: 2.5rem; }
@@ -441,7 +509,35 @@
   </style>
 </head>
 <body>
+  <!-- Falling Stars Background -->
+  <div class="stars-container" id="stars"></div>
+
   <div id="root"></div>
+
+  <script>
+    // Generate falling stars
+    (function() {
+      const container = document.getElementById('stars');
+      const starCount = 20;
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star' + (Math.random() > 0.5 ? ' reverse' : '');
+        
+        // Random position, size, opacity, and animation duration
+        star.style.left = Math.random() * 100 + '%';
+        const size = 14 + Math.random() * 18;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.opacity = 0.3 + Math.random() * 0.4;
+        star.style.animationDuration = (10 + Math.random() * 15) + 's';
+        // First 5 stars appear immediately, rest are staggered
+        star.style.animationDelay = i < 5 ? (i * 0.5) + 's' : (Math.random() * 8) + 's';
+        
+        container.appendChild(star);
+      }
+    })();
+  </script>
 
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -617,7 +713,7 @@
                 key={currentPosts}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEF0' }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEEF' }}
               >
                 {formatNumber(currentPosts)}
               </motion.div>
@@ -628,22 +724,22 @@
                 key={currentViews}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEF0' }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#00B481' }}
               >
                 {formatNumber(currentViews)}
               </motion.div>
-              <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Views</div>
+              <div style={{ fontSize: '0.55rem', color: '#00B481', textTransform: 'uppercase' }}>Views</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <motion.div 
                 key={currentLikes}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEF0' }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFB547' }}
               >
                 {formatNumber(currentLikes)}
               </motion.div>
-              <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Likes</div>
+              <div style={{ fontSize: '0.55rem', color: '#FFB547', textTransform: 'uppercase' }}>Likes</div>
             </div>
           </div>
         </motion.div>
@@ -651,18 +747,33 @@
     }
 
     function StoryCard({ card, index, total }) {
-      const gradients = ['gradient', 'gradient-2', 'gradient-3', 'gradient-4'];
-      const gradient = gradients[index % gradients.length];
-      const bgGradients = [
-        'radial-gradient(circle at 50% 0%, rgba(255,254,240,0.15) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(83,75,76,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(69,63,65,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(59,52,53,0.4) 0%, transparent 60%)'
-      ];
+      // Theme-based styling from BULK brand guidelines
+      const themeStyles = {
+        default: {
+          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(255, 254, 239, 0.12) 0%, transparent 60%)',
+          valueColor: '#FFFEEF',
+          labelColor: 'var(--text-dim)',
+          accentGlow: 'rgba(255, 254, 239, 0.15)'
+        },
+        green: {
+          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(0, 180, 129, 0.25) 0%, rgba(19, 74, 85, 0.15) 50%, transparent 70%)',
+          valueColor: '#00B481',
+          labelColor: '#00B481',
+          accentGlow: 'rgba(0, 180, 129, 0.2)'
+        },
+        gold: {
+          bgGlow: 'radial-gradient(circle at 50% 0%, rgba(255, 181, 71, 0.2) 0%, rgba(198, 138, 46, 0.1) 50%, transparent 70%)',
+          valueColor: '#FFB547',
+          labelColor: '#FFB547',
+          accentGlow: 'rgba(255, 181, 71, 0.15)'
+        }
+      };
+
+      const theme = themeStyles[card.theme] || themeStyles.default;
 
       return (
         <motion.div className="story-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
-          <div className="card-gradient" style={{ background: bgGradients[index % bgGradients.length] }} />
+          <div className="card-gradient" style={{ background: theme.bgGlow }} />
           <div className="card-content">
             <span className="card-number">{index + 1}/{total}</span>
 
@@ -674,15 +785,15 @@
                 ) : (
                   <div className="profile-pic-placeholder">?</div>
                 )}
-                <motion.h2 className={`card-value ${gradient}`} style={{ fontSize: '2.5rem' }} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>@{card.handle}</motion.h2>
+                <motion.h2 className="card-value" style={{ fontSize: '2.5rem', color: theme.valueColor }} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>@{card.handle}</motion.h2>
                 <p className="card-subtitle">Let's see how you've been supporting $BULK</p>
               </>
             )}
 
             {card.type === 'first_post' && (
               <>
-                <p className="card-label">JOURNEY STARTED</p>
-                <motion.h2 className={`card-value small ${gradient}`} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>{card.date}</motion.h2>
+                <p className="card-label" style={{ color: theme.labelColor }}>JOURNEY STARTED</p>
+                <motion.h2 className="card-value small" style={{ color: theme.valueColor }} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>{card.date}</motion.h2>
                 <p className="card-subtitle">Your first BULK mention</p>
                 {card.tweet && <TweetPreview tweet={card.tweet} />}
               </>
@@ -690,8 +801,8 @@
 
             {card.type === 'stat' && (
               <>
-                <p className="card-label">{card.label}</p>
-                <motion.h2 className={`card-value ${card.small ? 'small' : ''} ${gradient}`} initial={{ scale: 0.3 }} animate={{ scale: 1 }}>
+                <p className="card-label" style={{ color: theme.labelColor }}>{card.label}</p>
+                <motion.h2 className={`card-value ${card.small ? 'small' : ''}`} style={{ color: theme.valueColor, textShadow: `0 0 40px ${theme.accentGlow}` }} initial={{ scale: 0.3 }} animate={{ scale: 1 }}>
                   {card.animate ? <AnimatedCounter value={card.value} /> : card.value}
                 </motion.h2>
                 <p className="card-subtitle">{card.subtitle}</p>
@@ -700,8 +811,8 @@
 
             {card.type === 'tweet' && (
               <>
-                <p className="card-label">{card.label}</p>
-                <h2 className="card-title">{card.title}</h2>
+                <p className="card-label" style={{ color: theme.labelColor }}>{card.label}</p>
+                <h2 className="card-title" style={{ color: theme.valueColor }}>{card.title}</h2>
                 {card.tweet && <TweetPreview tweet={card.tweet} />}
               </>
             )}
@@ -752,26 +863,27 @@
       } : null;
 
       const cards = [
-        { type: 'intro', handle, profileImage },
-        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet },
-        { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK', animate: true },
-        { type: 'stat', label: 'TOTAL VIEWS', value: stats.total_views, subtitle: 'People saw your BULK content', animate: true },
-        { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true },
-        { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK' }
+        { type: 'intro', handle, profileImage, theme: 'default' },
+        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet, theme: 'gold' },
+        { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK', animate: true, theme: 'default' },
+        { type: 'stat', label: 'TOTAL VIEWS', value: stats.total_views, subtitle: 'People saw your BULK content', animate: true, theme: 'green' },
+        { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true, theme: 'gold' },
+        { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK', theme: 'default' }
       ];
 
       if (stats.most_viral_post) {
-        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post });
+        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post, theme: 'green' });
       }
 
       if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
-        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post });
+        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post, theme: 'gold' });
       }
 
       cards.push({
         type: 'final',
         handle,
         profileImage,
+        theme: 'default',
         stats: {
           posts: formatNumber(stats.total_posts),
           views: formatNumber(stats.total_views),
