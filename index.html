@@ -9,17 +9,21 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #000000;
-      --bg-card: #0a0a0a;
-      --bg-elevated: #111111;
-      --text: #ffffff;
-      --text-dim: #888888;
-      --accent: #00ff88;
-      --accent-secondary: #00d4ff;
-      --gradient-1: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-      --gradient-2: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
-      --gradient-3: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-      --gradient-4: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+      --bg: #1B1A13;
+      --bg-card: #141310;
+      --bg-elevated: #1B1A13;
+      --border: rgb(79, 75, 75);
+      --border-hover: rgba(255, 254, 240, 1);
+      --text: #FFFEF0;
+      --text-dim: #8b8b96;
+      --text-muted: #5c5c66;
+      --accent: #FFFEF0;
+      --accent-dim: linear-gradient(135deg, #534B4C 0%, #453F41 50%, #3B3435 100%);
+      --accent-gradient: linear-gradient(135deg, #534B4C 0%, #453F41 50%, #3B3435 100%);
+      --gradient-1: linear-gradient(135deg, #FFFEF0 0%, #d4d4c4 100%);
+      --gradient-2: linear-gradient(135deg, #534B4C 0%, #453F41 100%);
+      --gradient-3: linear-gradient(135deg, #6b5b5c 0%, #534B4C 100%);
+      --gradient-4: linear-gradient(135deg, #453F41 0%, #3B3435 100%);
     }
 
     body {
@@ -28,6 +32,36 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Falling Stars */
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: url('assets/star.png') no-repeat center center;
+      background-size: contain;
+      opacity: 0;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 
     #root { min-height: 100vh; }
@@ -57,7 +91,7 @@
 
     .handle-input {
       background: var(--bg-elevated);
-      border: 2px solid #222;
+      border: 2px solid var(--border);
       border-radius: 16px;
       padding: 1.25rem 1.5rem;
       font-size: 1.1rem;
@@ -67,23 +101,23 @@
       transition: all 0.3s;
     }
 
-    .handle-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+    .handle-input:focus { outline: none; border-color: var(--border-hover); box-shadow: 0 0 20px rgba(255, 254, 240, 0.1); }
     .handle-input::placeholder { color: var(--text-dim); }
 
     .generate-btn {
-      background: var(--gradient-1);
+      background: var(--accent);
       border: none;
       border-radius: 16px;
       padding: 1.25rem 2rem;
       font-size: 1.1rem;
       font-weight: 700;
-      color: #000;
+      color: var(--bg);
       cursor: pointer;
       transition: all 0.2s;
       font-family: inherit;
     }
 
-    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3); }
+    .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(255, 254, 240, 0.15); }
     .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .loading-screen {
@@ -111,18 +145,16 @@
 
     .progress-bar-fill {
       height: 100%;
-      background: var(--gradient-1);
+      background: var(--accent);
       border-radius: 10px;
       transition: width 0.3s ease;
-      box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+      box-shadow: 0 0 15px rgba(255, 254, 240, 0.3);
     }
 
     .progress-percentage {
       font-size: 2.5rem;
       font-weight: 800;
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent);
       margin-bottom: 0.5rem;
     }
 
@@ -170,7 +202,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      border: 1px solid #222;
+      border: 1px solid var(--border);
       overflow: hidden;
     }
 
@@ -206,11 +238,11 @@
 
     .card-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem; }
 
-    .card-value { font-size: 4rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1; }
-    .card-value.gradient { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .card-value.gradient-2 { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .card-value.gradient-3 { background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .card-value.gradient-4 { background: var(--gradient-4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .card-value { font-size: 4rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1; color: var(--accent); }
+    .card-value.gradient { color: var(--accent); }
+    .card-value.gradient-2 { color: var(--accent); opacity: 0.9; }
+    .card-value.gradient-3 { color: var(--accent); opacity: 0.85; }
+    .card-value.gradient-4 { color: var(--accent); opacity: 0.8; }
     .card-value.small { font-size: 2rem; }
 
     .card-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; }
@@ -223,7 +255,7 @@
       border: 4px solid var(--accent);
       object-fit: cover;
       margin-bottom: 1.5rem;
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      box-shadow: 0 0 30px rgba(255, 254, 240, 0.2);
     }
 
     .profile-pic-placeholder {
@@ -245,7 +277,7 @@
       margin-top: 1rem;
       width: 100%;
       text-align: left;
-      border: 1px solid #222;
+      border: 1px solid var(--border);
       overflow: hidden;
     }
 
@@ -253,8 +285,8 @@
       width: 100%;
       max-height: 280px;
       object-fit: cover;
-      border-bottom: 1px solid #222;
-      background: #111;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
     }
 
     .tweet-body { padding: 0.6rem; }
@@ -283,15 +315,15 @@
       padding: 0.75rem 1rem;
       background: var(--bg-card);
       border-radius: 14px;
-      border: 1px solid #222;
+      border: 1px solid var(--border);
     }
 
     .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
     .timeline-title { font-size: 0.7rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
     .timeline-date-range { font-size: 0.6rem; color: var(--text-dim); }
 
-    .timeline-track { position: relative; height: 6px; border-radius: 3px; background: #222; overflow: hidden; }
-    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: var(--gradient-1); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(0, 255, 136, 0.4); border-radius: 3px; }
+    .timeline-track { position: relative; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .timeline-line-progress { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); transition: width 0.5s ease; box-shadow: 0 0 8px rgba(255, 254, 240, 0.3); border-radius: 3px; }
 
     .progress-bar { display: flex; gap: 4px; margin-top: 1.5rem; width: 100%; max-width: 300px; }
 
@@ -384,7 +416,7 @@
       text-align: center;
     }
 
-    .error-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .error-icon { font-size: 4rem; margin-bottom: 1rem; width: 80px; height: 80px; border-radius: 50%; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; color: var(--text); font-weight: 700; }
     .error-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
     .error-message { color: var(--text-dim); margin-bottom: 2rem; max-width: 300px; }
 
@@ -394,7 +426,7 @@
     .summary-label { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 1px; }
 
     .glow { animation: glow 2s ease-in-out infinite alternate; }
-    @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(0,255,136,0.5)); } to { filter: drop-shadow(0 0 30px rgba(0,255,136,0.8)); } }
+    @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(255,254,240,0.3)); } to { filter: drop-shadow(0 0 30px rgba(255,254,240,0.6)); } }
 
     @media (max-width: 500px) {
       .logo { font-size: 2.5rem; }
@@ -500,7 +532,7 @@
     function ErrorScreen({ message, onRetry }) {
       return (
         <motion.div className="error-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div className="error-icon">😔</div>
+          <div className="error-icon">!</div>
           <h2 className="error-title">Oops!</h2>
           <p className="error-message">{message || 'Something went wrong'}</p>
           <button className="generate-btn" onClick={onRetry}>Try Again</button>
@@ -558,7 +590,7 @@
       return (
         <motion.div className="timeline-strip" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
           <div className="timeline-header">
-            <span className="timeline-title">📅 Your Journey</span>
+            <span className="timeline-title">Your Journey</span>
             <motion.span 
               className="timeline-date-range"
               key={currentIndex}
@@ -585,33 +617,33 @@
                 key={currentPosts}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#00ff88' }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEF0' }}
               >
                 {formatNumber(currentPosts)}
               </motion.div>
-              <div style={{ fontSize: '0.55rem', color: '#666', textTransform: 'uppercase' }}>Posts</div>
+              <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Posts</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <motion.div 
                 key={currentViews}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#00d4ff' }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEF0' }}
               >
                 {formatNumber(currentViews)}
               </motion.div>
-              <div style={{ fontSize: '0.55rem', color: '#666', textTransform: 'uppercase' }}>Views</div>
+              <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Views</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <motion.div 
                 key={currentLikes}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                style={{ fontSize: '1rem', fontWeight: '700', color: '#ff6b6b' }}
+                style={{ fontSize: '1rem', fontWeight: '700', color: '#FFFEF0' }}
               >
                 {formatNumber(currentLikes)}
               </motion.div>
-              <div style={{ fontSize: '0.55rem', color: '#666', textTransform: 'uppercase' }}>Likes</div>
+              <div style={{ fontSize: '0.55rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Likes</div>
             </div>
           </div>
         </motion.div>
@@ -622,10 +654,10 @@
       const gradients = ['gradient', 'gradient-2', 'gradient-3', 'gradient-4'];
       const gradient = gradients[index % gradients.length];
       const bgGradients = [
-        'radial-gradient(circle at 50% 0%, rgba(0,255,136,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(255,107,107,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(168,85,247,0.4) 0%, transparent 60%)',
-        'radial-gradient(circle at 50% 0%, rgba(59,130,246,0.4) 0%, transparent 60%)'
+        'radial-gradient(circle at 50% 0%, rgba(255,254,240,0.15) 0%, transparent 60%)',
+        'radial-gradient(circle at 50% 0%, rgba(83,75,76,0.4) 0%, transparent 60%)',
+        'radial-gradient(circle at 50% 0%, rgba(69,63,65,0.4) 0%, transparent 60%)',
+        'radial-gradient(circle at 50% 0%, rgba(59,52,53,0.4) 0%, transparent 60%)'
       ];
 
       return (
@@ -640,7 +672,7 @@
                 {card.profileImage ? (
                   <motion.img src={card.profileImage} alt="" className="profile-pic" initial={{ scale: 0.5 }} animate={{ scale: 1 }} onError={(e) => e.target.style.display = 'none'} />
                 ) : (
-                  <div className="profile-pic-placeholder">👤</div>
+                  <div className="profile-pic-placeholder">?</div>
                 )}
                 <motion.h2 className={`card-value ${gradient}`} style={{ fontSize: '2.5rem' }} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>@{card.handle}</motion.h2>
                 <p className="card-subtitle">Let's see how you've been supporting $BULK</p>
@@ -649,7 +681,7 @@
 
             {card.type === 'first_post' && (
               <>
-                <p className="card-label">🚀 JOURNEY STARTED</p>
+                <p className="card-label">JOURNEY STARTED</p>
                 <motion.h2 className={`card-value small ${gradient}`} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>{card.date}</motion.h2>
                 <p className="card-subtitle">Your first BULK mention</p>
                 {card.tweet && <TweetPreview tweet={card.tweet} />}
@@ -693,7 +725,7 @@
                   ))}
                 </div>
                 <button className="share-btn" onClick={() => {
-                  const text = `My BULK Wrapped 🎁\n\n📝 ${card.stats.posts} posts\n👀 ${card.stats.views} views\n❤️ ${card.stats.likes} likes\n🔥 ${card.stats.streak} month streak\n\nGenerate yours 👇`;
+                  const text = `My BULK Wrapped\n\n${card.stats.posts} posts\n${card.stats.views} views\n${card.stats.likes} likes\n${card.stats.streak} month streak\n\nGenerate yours at bulkwrapped.com`;
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
                 }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z"/></svg>
@@ -729,11 +761,11 @@
       ];
 
       if (stats.most_viral_post) {
-        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views 🔥', tweet: stats.most_viral_post });
+        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post });
       }
 
       if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
-        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes ❤️', tweet: stats.most_liked_post });
+        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post });
       }
 
       cards.push({
@@ -840,7 +872,7 @@
               es.close();
               clearInterval(msgInterval);
               setProgress(100);
-              setLoadingMessage('Done! 🎉');
+              setLoadingMessage('Done!');
               setTimeout(() => { setStats(data.stats); setUser(data.user); setScreen('story'); }, 250);
             }
           } catch (e) {}
@@ -878,7 +910,7 @@
           const d = await r.json();
           if (!r.ok) throw new Error(d.error || 'Failed');
           setProgress(100);
-          setLoadingMessage('Done! 🎉');
+          setLoadingMessage('Done!');
           setTimeout(() => { setStats(d.stats); setUser(d.user); setScreen('story'); }, 300);
         } catch (e) { 
           clearInterval(msgInterval); 
