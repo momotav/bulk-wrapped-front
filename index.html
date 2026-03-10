@@ -427,8 +427,16 @@
 
     function formatNumber(num) {
       if (!num) return '0';
-      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      num = Number(num);
+      if (isNaN(num)) return '0';
+      if (num >= 1000000) {
+        const val = num / 1000000;
+        return val % 1 === 0 ? val.toFixed(0) + 'M' : val.toFixed(1) + 'M';
+      }
+      if (num >= 1000) {
+        const val = num / 1000;
+        return val % 1 === 0 ? val.toFixed(0) + 'K' : val.toFixed(1) + 'K';
+      }
       return num.toLocaleString();
     }
 
@@ -526,6 +534,23 @@
     }
 
     function TimelineStrip({ stats, currentIndex, totalCards }) {
+      // Use posts_by_month data for the chart
+      const monthData = stats.posts_by_month || {};
+      const months = Object.keys(monthData).sort();
+      const chartData = months.slice(-6).map(m => ({
+        month: m,
+        posts: monthData[m] || 0
+      }));
+
+      // Calculate cumulative views per period (estimate based on total / periods)
+      const totalPosts = stats.total_posts || 1;
+      const totalViews = stats.total_views || 0;
+      const totalLikes = stats.total_likes || 0;
+      const avgViewsPerPost = totalViews / totalPosts;
+      const avgLikesPerPost = totalLikes / totalPosts;
+
+      const maxPosts = Math.max(...chartData.map(d => d.posts), 1);
+
       const dots = [
         { id: 'first', label: 'First Post', emoji: '🚀', cardIdx: 1 },
         { id: 'viral', label: 'Viral', emoji: '🔥', cardIdx: 6 },
@@ -550,7 +575,59 @@
             <span className="timeline-title">📅 Your Journey</span>
             <span className="timeline-date-range">{stats.first_post_date} → Now</span>
           </div>
-          <div className="timeline-track">
+
+          {/* Mini chart showing posts by month */}
+          {chartData.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '40px', marginBottom: '0.5rem', padding: '0 0.5rem' }}>
+              {chartData.map((d, i) => (
+                <motion.div
+                  key={d.month}
+                  initial={{ height: 0 }}
+                  animate={{ height: `${Math.max((d.posts / maxPosts) * 100, 10)}%` }}
+                  transition={{ delay: i * 0.1, duration: 0.4 }}
+                  style={{
+                    flex: 1,
+                    background: 'linear-gradient(to top, #00ff88, #00d4ff)',
+                    borderRadius: '3px 3px 0 0',
+                    position: 'relative',
+                    minHeight: '4px'
+                  }}
+                  title={`${d.month}: ${d.posts} posts`}
+                >
+                  <span style={{
+                    position: 'absolute',
+                    bottom: '-16px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    fontSize: '0.45rem',
+                    color: '#666',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {d.month.split('-')[1]}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* Stats summary */}
+          <div style={{ display: 'flex', justifyContent: 'space-around', padding: '0.4rem 0', marginTop: '1rem', borderTop: '1px solid #222' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#00ff88' }}>{formatNumber(stats.total_posts)}</div>
+              <div style={{ fontSize: '0.5rem', color: '#666', textTransform: 'uppercase' }}>Posts</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#00d4ff' }}>{formatNumber(stats.total_views)}</div>
+              <div style={{ fontSize: '0.5rem', color: '#666', textTransform: 'uppercase' }}>Views</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ff6b6b' }}>{formatNumber(stats.total_likes)}</div>
+              <div style={{ fontSize: '0.5rem', color: '#666', textTransform: 'uppercase' }}>Likes</div>
+            </div>
+          </div>
+
+          {/* Dot progress */}
+          <div className="timeline-track" style={{ marginTop: '0.5rem' }}>
             <div className="timeline-line-bg" />
             <motion.div className="timeline-line-progress" animate={{ width: `${progressWidth}%` }} transition={{ duration: 0.4 }} />
             <div className="timeline-dots">
@@ -566,9 +643,9 @@
               ))}
             </div>
           </div>
+
           <motion.div className="timeline-current" key={activeIdx} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div className="timeline-current-title">{current.emoji} {current.label}</div>
-            {current.id === 'first' && <div className="timeline-current-date">{stats.first_post_date}</div>}
           </motion.div>
         </motion.div>
       );
@@ -792,14 +869,20 @@
 
       const fallbackFetch = async (inputHandle) => {
         const start = Date.now();
+        const messages = [
+          'Scanning your timeline...',
+          'Finding BULK mentions...',
+          'Looking for gBULK posts...',
+          'Calculating your impact...',
+          'Preparing your wrapped...'
+        ];
+        let msgIdx = 0;
         const iv = setInterval(() => {
           const elapsed = Date.now() - start;
           const p = Math.min(Math.floor((elapsed / 120000) * 95), 95);
           setProgress(p);
-          if (p < 20) setLoadingMessage('Fetching profile...');
-          else if (p < 50) setLoadingMessage('Scanning tweets...');
-          else if (p < 80) setLoadingMessage('Finding BULK mentions...');
-          else setLoadingMessage('Almost done...');
+          msgIdx = Math.min(Math.floor(p / 20), messages.length - 1);
+          setLoadingMessage(messages[msgIdx]);
         }, 800);
 
         try {
