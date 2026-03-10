@@ -538,11 +538,35 @@
       const currentViews = Math.round((stats.total_views || 0) * progress);
       const currentLikes = Math.round((stats.total_likes || 0) * progress);
 
+      // Calculate progressive date
+      const getProgressDate = () => {
+        try {
+          const firstDate = new Date(stats.first_post_date);
+          const now = new Date();
+          if (isNaN(firstDate.getTime())) return stats.first_post_date;
+          
+          const totalMs = now.getTime() - firstDate.getTime();
+          const currentMs = firstDate.getTime() + (totalMs * progress);
+          const currentDate = new Date(currentMs);
+          
+          return currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        } catch {
+          return stats.first_post_date;
+        }
+      };
+
       return (
         <motion.div className="timeline-strip" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
           <div className="timeline-header">
             <span className="timeline-title">📅 Your Journey</span>
-            <span className="timeline-date-range">{stats.first_post_date} → Now</span>
+            <motion.span 
+              className="timeline-date-range"
+              key={currentIndex}
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: 1 }}
+            >
+              {getProgressDate()}
+            </motion.span>
           </div>
 
           {/* Simple progress bar */}
