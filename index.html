@@ -32,6 +32,7 @@
 
     #root { min-height: 100vh; }
 
+    /* Landing Page */
     .landing {
       min-height: 100vh;
       display: flex;
@@ -104,7 +105,7 @@
     }
     .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* Loading Screen with Progress */
+    /* Loading Screen */
     .loading-screen {
       min-height: 100vh;
       display: flex;
@@ -134,19 +135,19 @@
       background: var(--bg-elevated);
       border-radius: 10px;
       overflow: hidden;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .progress-bar-fill {
       height: 100%;
       background: var(--gradient-1);
       border-radius: 10px;
-      transition: width 0.3s ease;
+      transition: width 0.5s ease-out;
       box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
     }
 
     .progress-percentage {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 800;
       background: var(--gradient-1);
       -webkit-background-clip: text;
@@ -160,11 +161,27 @@
       min-height: 24px;
     }
 
-    .tweets-count {
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      margin-top: 1rem;
-      opacity: 0.7;
+    .scanning-animation {
+      display: flex;
+      gap: 4px;
+      margin-top: 1.5rem;
+    }
+
+    .scanning-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: bounce 1.4s ease-in-out infinite;
+    }
+
+    .scanning-dot:nth-child(1) { animation-delay: 0s; }
+    .scanning-dot:nth-child(2) { animation-delay: 0.2s; }
+    .scanning-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
     }
 
     /* Story Container */
@@ -173,8 +190,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 1rem;
+      padding-bottom: 180px;
       position: relative;
     }
 
@@ -182,9 +199,10 @@
       width: 100%;
       max-width: 420px;
       aspect-ratio: 9/16;
-      max-height: 90vh;
+      max-height: 68vh;
       position: relative;
       perspective: 1000px;
+      margin-top: 0.5rem;
     }
 
     .story-card {
@@ -292,7 +310,7 @@
 
     .tweet-media {
       width: 100%;
-      height: 160px;
+      height: 140px;
       object-fit: cover;
       border-bottom: 1px solid #222;
       background: #111;
@@ -301,169 +319,170 @@
     .tweet-body { padding: 1rem; }
 
     .tweet-text {
-      font-size: 0.9rem;
-      line-height: 1.6;
+      font-size: 0.85rem;
+      line-height: 1.5;
       color: var(--text);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       display: -webkit-box;
-      -webkit-line-clamp: 4;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    .tweet-stats { display: flex; gap: 1.5rem; font-size: 0.85rem; color: var(--text-dim); }
+    .tweet-stats { display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--text-dim); }
     .tweet-stat { display: flex; align-items: center; gap: 0.4rem; }
-    .tweet-stat svg { width: 16px; height: 16px; }
+    .tweet-stat svg { width: 14px; height: 14px; }
 
-    /* Timeline Strip */
+    /* Chronological Timeline Strip */
     .timeline-strip {
-      width: 100%;
-      padding: 1rem 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, var(--bg) 85%, transparent);
+      padding: 1.25rem 1rem 1.5rem;
+      z-index: 100;
     }
 
-    .timeline-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .timeline-inner {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      padding: 0 0.25rem;
+    }
+
+    .timeline-label {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .timeline-date-range {
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-weight: 500;
     }
 
     .timeline-track {
       position: relative;
-      padding: 0 1rem;
-    }
-
-    .timeline-line {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--accent), var(--accent-secondary));
-      transform: translateX(-50%);
-    }
-
-    .timeline-event {
-      display: flex;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    .timeline-event:nth-child(odd) { flex-direction: row; }
-    .timeline-event:nth-child(even) { flex-direction: row-reverse; }
-
-    .timeline-dot {
-      position: absolute;
-      left: 50%;
-      top: 0.5rem;
-      width: 12px;
-      height: 12px;
-      background: var(--accent);
-      border-radius: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 0 10px var(--accent);
-      z-index: 2;
-    }
-
-    .timeline-content {
-      width: 45%;
+      height: 50px;
       background: var(--bg-elevated);
       border-radius: 12px;
-      padding: 0.75rem 1rem;
+      overflow: hidden;
       border: 1px solid #222;
     }
 
-    .timeline-event:nth-child(odd) .timeline-content { margin-right: auto; text-align: right; }
-    .timeline-event:nth-child(even) .timeline-content { margin-left: auto; text-align: left; }
-
-    .timeline-date {
-      font-size: 0.7rem;
-      color: var(--accent);
-      margin-bottom: 0.25rem;
-    }
-
-    .timeline-event-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .timeline-event-desc {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-
-    /* Bi-weekly Chart */
-    .biweekly-chart {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-    .chart-bars {
+    .timeline-bars {
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: flex-end;
-      gap: 4px;
-      height: 100px;
-      padding: 0 0.5rem;
+      padding: 6px;
+      gap: 2px;
     }
 
-    .chart-bar {
+    .timeline-bar {
       flex: 1;
-      background: var(--gradient-1);
-      border-radius: 4px 4px 0 0;
+      background: #1a1a1a;
+      border-radius: 2px;
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       min-height: 4px;
-      position: relative;
     }
 
-    .chart-label {
+    .timeline-bar.revealed {
+      background: var(--gradient-1);
+      box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+    }
+
+    .timeline-current-marker {
       position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 4px;
+      width: 2px;
+      height: calc(100% - 8px);
+      background: white;
+      border-radius: 1px;
+      box-shadow: 0 0 10px white;
+      transition: left 0.5s ease-out;
+    }
+
+    .timeline-events {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .timeline-badge {
+      background: var(--bg-elevated);
+      border: 1px solid #333;
+      border-radius: 16px;
+      padding: 0.2rem 0.5rem;
       font-size: 0.6rem;
       color: var(--text-dim);
-      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(5px) scale(0.9);
+      transition: all 0.4s ease;
     }
 
-    /* Progress bar at bottom */
-    .progress-bar {
+    .timeline-badge.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .timeline-badge.highlight {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    /* Navigation */
+    .nav-area {
       display: flex;
-      gap: 4px;
-      margin-top: 1.5rem;
-      width: 100%;
-      max-width: 300px;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
     }
 
-    .progress-segment {
-      flex: 1;
-      height: 3px;
-      border-radius: 2px;
-      background: rgba(255,255,255,0.1);
-      overflow: hidden;
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
       cursor: pointer;
+      transition: all 0.3s;
     }
 
-    .progress-fill {
-      height: 100%;
+    .progress-dot.active {
       background: var(--accent);
-      border-radius: 2px;
-      width: 0%;
-      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent);
     }
 
-    .progress-segment.completed .progress-fill,
-    .progress-segment.active .progress-fill { width: 100%; }
+    .progress-dot.completed {
+      background: var(--accent);
+      opacity: 0.5;
+    }
 
-    .nav-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
+    .nav-buttons { display: flex; gap: 1rem; }
 
     .nav-btn {
       background: var(--bg-elevated);
       border: 1px solid #333;
       border-radius: 50%;
-      width: 48px; height: 48px;
+      width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
@@ -472,7 +491,7 @@
 
     .nav-btn:hover { background: #222; border-color: var(--accent); color: var(--accent); }
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .nav-btn svg { width: 20px; height: 20px; }
+    .nav-btn svg { width: 18px; height: 18px; }
 
     .final-logo {
       font-size: 2rem;
@@ -480,39 +499,35 @@
       background: var(--gradient-1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .share-btn {
       background: var(--gradient-1);
       border: none;
       border-radius: 12px;
-      padding: 1rem 2rem;
-      font-size: 1rem;
+      padding: 0.875rem 1.75rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: #000;
       cursor: pointer;
       display: flex; align-items: center; gap: 0.5rem;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       font-family: inherit;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s;
     }
 
-    .share-btn:hover { 
-      transform: scale(1.05);
-      box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
-    }
+    .share-btn:hover { transform: scale(1.05); }
 
     .restart-btn {
       background: transparent;
       border: 1px solid #333;
       border-radius: 12px;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
       color: var(--text-dim);
       cursor: pointer;
-      margin-top: 1rem;
+      margin-top: 0.5rem;
       font-family: inherit;
     }
 
@@ -535,21 +550,21 @@
     .summary-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: 0.75rem;
       width: 100%;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
 
     .summary-item {
       background: var(--bg-elevated);
       border-radius: 12px;
-      padding: 1.25rem 1rem;
+      padding: 1rem 0.75rem;
       text-align: center;
       border: 1px solid #222;
     }
 
-    .summary-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
-    .summary-label { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 1px; }
+    .summary-value { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+    .summary-label { font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 1px; }
 
     .glow { animation: glow 2s ease-in-out infinite alternate; }
     @keyframes glow { from { filter: drop-shadow(0 0 10px rgba(0,255,136,0.5)); } to { filter: drop-shadow(0 0 30px rgba(0,255,136,0.8)); } }
@@ -557,12 +572,12 @@
     @media (max-width: 500px) {
       .logo { font-size: 2.5rem; }
       .card-value { font-size: 3rem; }
-      .card-value.small { font-size: 1.75rem; }
-      .card-wrapper { max-height: 85vh; }
+      .card-value.small { font-size: 1.5rem; }
+      .card-wrapper { max-height: 62vh; }
       .story-card { padding: 1.5rem; }
-      .tweet-media { height: 130px; }
+      .tweet-media { height: 120px; }
       .profile-pic { width: 100px; height: 100px; }
-      .timeline-content { padding: 0.5rem 0.75rem; }
+      .story-container { padding-bottom: 170px; }
     }
   </style>
 </head>
@@ -641,7 +656,7 @@
       );
     }
 
-    function LoadingScreen({ handle, progress, message, tweetsFound }) {
+    function LoadingScreen({ handle, progress, message }) {
       return (
         <motion.div className="loading-screen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <motion.p className="loading-handle" initial={{ scale: 0.8 }} animate={{ scale: 1 }}>
@@ -652,35 +667,26 @@
             <div className="progress-bar-bg">
               <motion.div 
                 className="progress-bar-fill" 
-                initial={{ width: '0%' }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3 }}
+                style={{ width: `${progress}%` }}
               />
             </div>
             
             <motion.div 
               className="progress-percentage"
-              key={progress}
-              initial={{ scale: 1.2 }}
+              key={Math.floor(progress / 10)}
+              initial={{ scale: 1.1 }}
               animate={{ scale: 1 }}
             >
               {progress}%
             </motion.div>
             
-            <motion.p 
-              className="progress-message"
-              key={message}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              {message}
-            </motion.p>
+            <p className="progress-message">{message}</p>
             
-            {tweetsFound > 0 && (
-              <motion.p className="tweets-count" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                {tweetsFound} tweets scanned
-              </motion.p>
-            )}
+            <div className="scanning-animation">
+              <div className="scanning-dot" />
+              <div className="scanning-dot" />
+              <div className="scanning-dot" />
+            </div>
           </div>
         </motion.div>
       );
@@ -697,64 +703,94 @@
       );
     }
 
-    function TimelineStrip({ timeline }) {
-      const events = timeline.filter(e => e.type !== 'biweekly_chart');
-      const chartData = timeline.find(e => e.type === 'biweekly_chart')?.data || [];
+    function ChronologicalTimeline({ timeline, currentIndex, totalCards, stats }) {
+      const events = timeline?.filter(e => e.type !== 'biweekly_chart') || [];
+      const chartData = timeline?.find(e => e.type === 'biweekly_chart')?.data || [];
+      
+      // Progress through the story (0 to 1)
+      const storyProgress = currentIndex / (totalCards - 1);
+      
+      // How many bars should be revealed
+      const revealedBars = Math.ceil(chartData.length * storyProgress);
+      
+      // Current marker position
+      const markerPosition = 6 + (storyProgress * (100 - 12)); // 6px padding on each side
+      
+      // Which events to show
+      const visibleEventCount = Math.ceil(events.length * storyProgress);
       
       const maxViews = Math.max(...chartData.map(d => d.views), 1);
+      const firstDate = stats?.first_post_date || 'Start';
 
       return (
         <div className="timeline-strip">
-          <h3 className="timeline-title">📅 Your BULK Journey</h3>
-          
-          {/* Bi-weekly chart */}
-          {chartData.length > 0 && (
-            <motion.div className="biweekly-chart" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-              <div className="chart-bars">
-                {chartData.slice(-10).map((period, i) => (
-                  <motion.div
-                    key={i}
-                    className="chart-bar"
-                    initial={{ height: 0 }}
-                    animate={{ height: `${Math.max((period.views / maxViews) * 100, 5)}%` }}
-                    transition={{ delay: 0.1 * i, duration: 0.5 }}
-                    title={`${period.period}: ${formatNumber(period.views)} views`}
-                  >
-                    {i % 2 === 0 && <span className="chart-label">{period.period}</span>}
-                  </motion.div>
-                ))}
+          <div className="timeline-inner">
+            <div className="timeline-header">
+              <span className="timeline-label">Your Journey</span>
+              <span className="timeline-date-range">
+                {currentIndex === 0 ? '...' : `${firstDate} → Now`}
+              </span>
+            </div>
+            
+            <div className="timeline-track">
+              <div className="timeline-bars">
+                {chartData.length > 0 ? chartData.map((period, i) => {
+                  const height = Math.max((period.views / maxViews) * 100, 10);
+                  const isRevealed = i < revealedBars;
+                  
+                  return (
+                    <div
+                      key={i}
+                      className={`timeline-bar ${isRevealed ? 'revealed' : ''}`}
+                      style={{ 
+                        height: isRevealed ? `${height}%` : '10%',
+                        transitionDelay: isRevealed ? `${(i - revealedBars + 3) * 0.05}s` : '0s'
+                      }}
+                      title={`${period.period}: ${formatNumber(period.views)} views`}
+                    />
+                  );
+                }) : (
+                  // Fallback if no chart data
+                  Array.from({ length: 20 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className={`timeline-bar ${i < revealedBars ? 'revealed' : ''}`}
+                      style={{ height: `${20 + Math.random() * 60}%` }}
+                    />
+                  ))
+                )}
               </div>
-              <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '1.5rem' }}>
-                Views per 2-week period
-              </p>
-            </motion.div>
-          )}
-
-          {/* Timeline events */}
-          <div className="timeline-track" style={{ marginTop: '2rem' }}>
-            <div className="timeline-line" />
-            {events.slice(0, 5).map((event, i) => (
-              <motion.div
-                key={i}
-                className="timeline-event"
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.15 }}
-              >
-                <div className="timeline-dot" />
-                <div className="timeline-content">
-                  <div className="timeline-date">{event.date}</div>
-                  <div className="timeline-event-title">{event.title}</div>
-                  <div className="timeline-event-desc">{event.description}</div>
-                </div>
-              </motion.div>
-            ))}
+              
+              {/* Moving marker */}
+              <div 
+                className="timeline-current-marker"
+                style={{ left: `${markerPosition}%` }}
+              />
+            </div>
+            
+            {/* Event badges */}
+            <div className="timeline-events">
+              {events.slice(0, 5).map((event, i) => {
+                const isVisible = i < visibleEventCount;
+                const isHighlight = event.type === 'milestone' || event.type === 'viral';
+                
+                return (
+                  <div
+                    key={i}
+                    className={`timeline-badge ${isVisible ? 'visible' : ''} ${isHighlight ? 'highlight' : ''}`}
+                    style={{ transitionDelay: `${i * 0.1}s` }}
+                  >
+                    {event.title}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       );
     }
 
-    function StoryCard({ card, index, total, timeline }) {
+    function StoryCard({ card, index, total }) {
       const gradients = ['gradient', 'gradient-2', 'gradient-3', 'gradient-4'];
       const gradient = gradients[index % gradients.length];
       const bgGradients = [
@@ -770,7 +806,7 @@
           initial={{ opacity: 0, scale: 0.9, rotateX: 10 }}
           animate={{ opacity: 1, scale: 1, rotateX: 0 }}
           exit={{ opacity: 0, scale: 0.9, rotateX: -10 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
           <div className="card-gradient" style={{ background: bgGradients[index % bgGradients.length] }} />
           <div className="card-content">
@@ -826,13 +862,9 @@
               </>
             )}
 
-            {card.type === 'timeline' && timeline && (
-              <TimelineStrip timeline={timeline} />
-            )}
-
             {card.type === 'final' && (
               <>
-                {card.profileImage && <img src={card.profileImage} alt="" className="profile-pic" style={{ width: '80px', height: '80px', marginBottom: '1rem' }} onError={(e) => e.target.style.display = 'none'} />}
+                {card.profileImage && <img src={card.profileImage} alt="" className="profile-pic" style={{ width: '70px', height: '70px', marginBottom: '1rem' }} onError={(e) => e.target.style.display = 'none'} />}
                 <h2 className="final-logo glow">BULK WRAPPED</h2>
                 <p className="card-label">@{card.handle}</p>
                 <div className="summary-grid">
@@ -840,7 +872,7 @@
                     { value: card.stats.posts, label: 'Posts' },
                     { value: card.stats.views, label: 'Views' },
                     { value: card.stats.likes, label: 'Likes' },
-                    { value: card.stats.streak, label: 'Month Streak' }
+                    { value: card.stats.streak, label: 'Streak' }
                   ].map((item, i) => (
                     <motion.div key={i} className="summary-item" initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.1 * i }}>
                       <div className="summary-value">{item.value}</div>
@@ -852,7 +884,7 @@
                   const text = `My BULK Wrapped 🎁\n\n📝 ${card.stats.posts} posts\n👀 ${card.stats.views} views\n❤️ ${card.stats.likes} likes\n🔥 ${card.stats.streak} month streak\n\nGenerate yours 👇`;
                   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
                 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                   Share on X
                 </button>
               </>
@@ -882,11 +914,6 @@
       if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
         cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes ❤️', tweet: stats.most_liked_post });
       }
-
-      // Add timeline card
-      if (timeline && timeline.length > 0) {
-        cards.push({ type: 'timeline' });
-      }
       
       cards.push({ 
         type: 'final', 
@@ -912,33 +939,73 @@
         return () => window.removeEventListener('keydown', handleKey);
       }, [currentIndex]);
 
+      // Touch swipe
+      const touchStart = useRef(null);
+      const handleTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
+      const handleTouchEnd = (e) => {
+        if (!touchStart.current) return;
+        const diff = touchStart.current - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) goNext();
+          else goPrev();
+        }
+        touchStart.current = null;
+      };
+
       return (
         <motion.div className="story-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div className="card-wrapper" onClick={goNext} style={{ cursor: currentIndex < cards.length - 1 ? 'pointer' : 'default' }}>
+          <div 
+            className="card-wrapper" 
+            onClick={goNext} 
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            style={{ cursor: currentIndex < cards.length - 1 ? 'pointer' : 'default' }}
+          >
             <AnimatePresence mode="wait">
-              <StoryCard key={currentIndex} card={cards[currentIndex]} index={currentIndex} total={cards.length} timeline={timeline} />
+              <StoryCard key={currentIndex} card={cards[currentIndex]} index={currentIndex} total={cards.length} />
             </AnimatePresence>
           </div>
 
-          <div className="progress-bar">
-            {cards.map((_, i) => (
-              <div key={i} className={`progress-segment ${i < currentIndex ? 'completed' : ''} ${i === currentIndex ? 'active' : ''}`} onClick={() => setCurrentIndex(i)}>
-                <div className="progress-fill" style={{ width: i <= currentIndex ? '100%' : '0%' }} />
-              </div>
-            ))}
+          <div className="nav-area">
+            <div className="progress-dots">
+              {cards.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`progress-dot ${i === currentIndex ? 'active' : ''} ${i < currentIndex ? 'completed' : ''}`}
+                  onClick={() => setCurrentIndex(i)}
+                />
+              ))}
+            </div>
+
+            <div className="nav-buttons">
+              <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goPrev(); }} disabled={currentIndex === 0}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goNext(); }} disabled={currentIndex === cards.length - 1}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+
+            {currentIndex === cards.length - 1 && (
+              <motion.button 
+                className="restart-btn" 
+                onClick={onRestart}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                Try Another Handle
+              </motion.button>
+            )}
           </div>
 
-          <div className="nav-buttons">
-            <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goPrev(); }} disabled={currentIndex === 0}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <button className="nav-btn" onClick={(e) => { e.stopPropagation(); goNext(); }} disabled={currentIndex === cards.length - 1}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
-
-          {currentIndex === cards.length - 1 && (
-            <button className="restart-btn" onClick={onRestart}>Try Another Handle</button>
+          {/* Chronological Timeline - Fixed at bottom, updates as you scroll */}
+          {timeline && timeline.length > 0 && (
+            <ChronologicalTimeline 
+              timeline={timeline} 
+              currentIndex={currentIndex} 
+              totalCards={cards.length}
+              stats={stats}
+            />
           )}
         </motion.div>
       );
@@ -952,77 +1019,68 @@
       const [timeline, setTimeline] = useState(null);
       const [error, setError] = useState('');
       const [progress, setProgress] = useState(0);
-      const [loadingMessage, setLoadingMessage] = useState('Starting...');
-      const [tweetsFound, setTweetsFound] = useState(0);
+      const [loadingMessage, setLoadingMessage] = useState('Connecting...');
 
       const handleSubmit = async (inputHandle) => {
         setHandle(inputHandle);
         setScreen('loading');
         setError('');
         setProgress(0);
-        setTweetsFound(0);
-        setLoadingMessage('Connecting...');
+        setLoadingMessage('Connecting to API...');
+
+        // Simulate progress while waiting
+        const messages = [
+          { at: 5, msg: 'Fetching profile...' },
+          { at: 15, msg: 'Scanning your timeline...' },
+          { at: 25, msg: 'Finding BULK mentions...' },
+          { at: 40, msg: 'Checking for gBULK posts...' },
+          { at: 55, msg: 'Analyzing engagement...' },
+          { at: 70, msg: 'Calculating your stats...' },
+          { at: 85, msg: 'Building timeline...' },
+          { at: 95, msg: 'Almost there...' }
+        ];
+
+        let progressInterval;
+        let currentProgress = 0;
+        
+        progressInterval = setInterval(() => {
+          if (currentProgress < 95) {
+            currentProgress += Math.random() * 4 + 1;
+            currentProgress = Math.min(currentProgress, 95);
+            setProgress(Math.floor(currentProgress));
+            
+            const msg = messages.find(m => m.at <= currentProgress && m.at > currentProgress - 8);
+            if (msg) setLoadingMessage(msg.msg);
+          }
+        }, 400);
 
         try {
-          // Use Server-Sent Events for progress
-          const eventSource = new EventSource(`${API_URL}/api/wrapped/stream?handle=${encodeURIComponent(inputHandle)}`);
-          
-          eventSource.onmessage = (event) => {
-            try {
-              const data = JSON.parse(event.data);
-              
-              if (data.step === 'error') {
-                eventSource.close();
-                setError(data.error);
-                setScreen('error');
-                return;
-              }
-              
-              if (data.progress) setProgress(data.progress);
-              if (data.message) setLoadingMessage(data.message);
-              if (data.tweets_found) setTweetsFound(data.tweets_found);
-              
-              if (data.step === 'complete') {
-                eventSource.close();
-                setStats(data.stats);
-                setUser(data.user);
-                setTimeline(data.timeline);
-                setScreen('story');
-              }
-            } catch (e) {
-              console.error('Parse error:', e);
-            }
-          };
-
-          eventSource.onerror = (err) => {
-            eventSource.close();
-            // Fallback to regular POST if SSE fails
-            fallbackFetch(inputHandle);
-          };
-
-        } catch (err) {
-          fallbackFetch(inputHandle);
-        }
-      };
-
-      const fallbackFetch = async (inputHandle) => {
-        try {
-          setLoadingMessage('Fetching data...');
           const response = await fetch(`${API_URL}/api/wrapped`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ handle: inputHandle })
           });
+
+          clearInterval(progressInterval);
           
           const data = await response.json();
           
-          if (!response.ok) throw new Error(data.error || 'Failed to fetch');
+          if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch data');
+          }
+
+          setProgress(100);
+          setLoadingMessage('Done!');
           
-          setStats(data.stats);
-          setUser(data.user);
-          setTimeline(data.timeline);
-          setScreen('story');
+          setTimeout(() => {
+            setStats(data.stats);
+            setUser(data.user);
+            setTimeline(data.timeline || []);
+            setScreen('story');
+          }, 400);
+          
         } catch (err) {
+          clearInterval(progressInterval);
           setError(err.message);
           setScreen('error');
         }
@@ -1040,7 +1098,7 @@
       return (
         <AnimatePresence mode="wait">
           {screen === 'landing' && <LandingPage key="landing" onSubmit={handleSubmit} />}
-          {screen === 'loading' && <LoadingScreen key="loading" handle={handle} progress={progress} message={loadingMessage} tweetsFound={tweetsFound} />}
+          {screen === 'loading' && <LoadingScreen key="loading" handle={handle} progress={progress} message={loadingMessage} />}
           {screen === 'story' && stats && <StoryView key="story" stats={stats} handle={handle} user={user} timeline={timeline} onRestart={handleRestart} />}
           {screen === 'error' && <ErrorScreen key="error" message={error} onRetry={handleRestart} />}
         </AnimatePresence>
