@@ -270,7 +270,8 @@
     .download-btn {
       position: absolute;
       bottom: 1rem;
-      right: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -287,7 +288,7 @@
     .download-btn:hover {
       background: rgba(255, 255, 255, 0.2);
       color: var(--text);
-      transform: scale(1.05);
+      transform: translateX(-50%) scale(1.05);
     }
     .card-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem; }
     .card-value { font-size: 4rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1; color: var(--accent); }
@@ -707,36 +708,40 @@
       
       return (
         <motion.div className="story-card" id={`card-${index}`} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
-          {/* Background PFP - top-left, fully visible */}
-          {card.profileImage && card.type !== 'intro' && (
+          {/* Small PFP + handle in top left */}
+          {card.profileImage && card.type !== 'intro' && card.type !== 'final' && (
             <div style={{
               position: 'absolute',
-              top: '5%',
-              left: '3%',
-              width: '55%',
-              aspectRatio: '1/1',
-              opacity: 0.1,
-              pointerEvents: 'none',
-              zIndex: 0,
-              borderRadius: '50%',
-              overflow: 'hidden'
+              top: '1rem',
+              left: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              zIndex: 5
             }}>
               <img 
                 src={card.profileImage} 
                 alt="" 
                 style={{
-                  width: '100%',
-                  height: '100%',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
                   objectFit: 'cover',
-                  filter: 'grayscale(100%)'
+                  border: '2px solid rgba(255, 255, 255, 0.2)'
                 }}
                 onError={(e) => e.target.style.display = 'none'}
               />
+              <span style={{
+                fontSize: '0.75rem',
+                color: 'var(--text-dim)',
+                fontWeight: '500'
+              }}>@{card.handle || ''}</span>
             </div>
           )}
+          
           <div className="card-gradient" style={{ background: theme.bgGlow }} />
           
-          {/* Download button */}
+          {/* Download button - bottom center */}
           <button 
             className="download-btn"
             onClick={(e) => { e.stopPropagation(); onDownload && onDownload(index); }}
@@ -840,20 +845,20 @@
       // Cards with balanced themes: WHITE primary, GREEN for views, RED for likes
       const cards = [
         { type: 'intro', handle, profileImage, theme: 'default' },
-        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet, profileImage, theme: 'default' },
-        { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK', animate: true, profileImage, theme: 'default' },
-        { type: 'stat', label: 'TOTAL VIEWS', value: stats.total_views, subtitle: 'People saw your BULK content', animate: true, profileImage, theme: 'green' },
-        { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true, profileImage, theme: 'red' },
-        { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK', profileImage, theme: 'default' }
+        { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet, handle, profileImage, theme: 'default' },
+        { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK', animate: true, handle, profileImage, theme: 'default' },
+        { type: 'stat', label: 'TOTAL VIEWS', value: stats.total_views, subtitle: 'People saw your BULK content', animate: true, handle, profileImage, theme: 'green' },
+        { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true, handle, profileImage, theme: 'red' },
+        { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK', handle, profileImage, theme: 'default' }
       ];
       
       if (stats.most_viral_post) {
-        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post, profileImage, theme: 'green' });
+        cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post, handle, profileImage, theme: 'green' });
       }
       
       // Always show most liked post (even if same as most viral)
       if (stats.most_liked_post) {
-        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post, profileImage, theme: 'red' });
+        cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post, handle, profileImage, theme: 'red' });
       }
       
       cards.push({
