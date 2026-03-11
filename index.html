@@ -7,6 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html {
+      background: #141310;
+      overscroll-behavior: none;
+    }
     :root {
       /* BULK Brand - Primary Dark Palette */
       --bulk-base: #141310;
@@ -48,9 +52,11 @@
       font-family: 'Outfit', -apple-system, sans-serif;
       background: linear-gradient(180deg, #141310 0%, #211F1B 50%, #141310 100%);
       background-attachment: fixed;
+      background-color: #141310;
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
+      overscroll-behavior: none;
       position: relative;
     }
     /* Falling Stars Background - matches BulkGram leaderboard */
@@ -707,7 +713,7 @@
       const theme = themeStyles[card.theme] || themeStyles.default;
       
       return (
-        <motion.div className="story-card" id={`card-${index}`} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
+        <motion.div className="story-card" id={`card-${index}`} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }}>
           {/* Small PFP + handle in top left */}
           {card.profileImage && card.type !== 'intro' && card.type !== 'final' && (
             <div style={{
@@ -874,8 +880,31 @@
         }
       });
       
-      const goNext = () => { if (currentIndex < cards.length - 1) setCurrentIndex(currentIndex + 1); };
-      const goPrev = () => { if (currentIndex > 0) setCurrentIndex(currentIndex - 1); };
+      // Debounce navigation to prevent lag from rapid clicking
+      const isNavigating = React.useRef(false);
+      const navigationTimeout = React.useRef(null);
+      
+      const goNext = () => { 
+        if (isNavigating.current || currentIndex >= cards.length - 1) return;
+        isNavigating.current = true;
+        setCurrentIndex(currentIndex + 1);
+        // Allow next navigation after animation completes
+        clearTimeout(navigationTimeout.current);
+        navigationTimeout.current = setTimeout(() => { isNavigating.current = false; }, 350);
+      };
+      
+      const goPrev = () => { 
+        if (isNavigating.current || currentIndex <= 0) return;
+        isNavigating.current = true;
+        setCurrentIndex(currentIndex - 1);
+        clearTimeout(navigationTimeout.current);
+        navigationTimeout.current = setTimeout(() => { isNavigating.current = false; }, 350);
+      };
+      
+      // Cleanup timeout on unmount
+      React.useEffect(() => {
+        return () => clearTimeout(navigationTimeout.current);
+      }, []);
       
       const downloadCard = async (cardIndex) => {
         const cardElement = document.getElementById(`card-${cardIndex}`);
@@ -918,7 +947,7 @@
       
       return (
         <motion.div className="story-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div className="card-wrapper" onClick={goNext} style={{ cursor: currentIndex < cards.length - 1 ? 'pointer' : 'default', position: 'relative' }}>
+          <div className="card-wrapper" onClick={() => goNext()} style={{ cursor: currentIndex < cards.length - 1 && !isNavigating.current ? 'pointer' : 'default', position: 'relative' }}>
             <AnimatePresence mode="wait">
               <StoryCard key={currentIndex} card={cards[currentIndex]} index={currentIndex} total={cards.length} onDownload={downloadCard} />
             </AnimatePresence>
@@ -934,7 +963,13 @@
           <TimelineStrip stats={stats} currentIndex={currentIndex} totalCards={cards.length} />
           <div className="progress-bar">
             {cards.map((_, i) => (
-              <div key={i} className={`progress-segment ${i < currentIndex ? 'completed' : ''} ${i === currentIndex ? 'active' : ''}`} onClick={() => setCurrentIndex(i)}>
+              <div key={i} className={`progress-segment ${i < currentIndex ? 'completed' : ''} ${i === currentIndex ? 'active' : ''}`} onClick={() => {
+                if (isNavigating.current || i === currentIndex) return;
+                isNavigating.current = true;
+                setCurrentIndex(i);
+                clearTimeout(navigationTimeout.current);
+                navigationTimeout.current = setTimeout(() => { isNavigating.current = false; }, 350);
+              }}>
                 <div className="progress-fill" style={{ width: i <= currentIndex ? '100%' : '0%' }} />
               </div>
             ))}
