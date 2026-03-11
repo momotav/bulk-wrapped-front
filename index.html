@@ -767,9 +767,10 @@
       const firstTweet = stats.first_post ? { 
         text: stats.first_post.text, 
         date: stats.first_post.date, 
-        likes: 0, 
-        views: 0,
-        media: stats.first_post.media
+        likes: stats.first_post.likes || 0, 
+        views: stats.first_post.views || 0,
+        media: stats.first_post.media,
+        url: stats.first_post.url
       } : null;
       
       // Cards with balanced themes: WHITE primary, GREEN for views, RED for likes
@@ -786,7 +787,8 @@
         cards.push({ type: 'tweet', label: 'YOUR VIRAL HIT', title: formatNumber(stats.most_viral_post.views) + ' views', tweet: stats.most_viral_post, theme: 'green' });
       }
       
-      if (stats.most_liked_post && stats.most_liked_post.text !== stats.most_viral_post?.text) {
+      // Always show most liked post (even if same as most viral)
+      if (stats.most_liked_post) {
         cards.push({ type: 'tweet', label: 'MOST LOVED POST', title: formatNumber(stats.most_liked_post.likes) + ' likes', tweet: stats.most_liked_post, theme: 'red' });
       }
       
