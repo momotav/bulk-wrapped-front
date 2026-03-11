@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BULK Wrapped</title>
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="icon" type="image/png" href="assets/logo.png?v=2">
+  <link rel="apple-touch-icon" href="assets/logo.png?v=2">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -352,9 +352,26 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .tweet-stats { display: flex; gap: 1rem; font-size: 0.7rem; color: var(--text-dim); }
+    .tweet-stats { display: flex; gap: 1rem; font-size: 0.7rem; color: var(--text-dim); align-items: center; }
     .tweet-stat { display: flex; align-items: center; gap: 0.25rem; }
     .tweet-stat svg { width: 12px; height: 12px; }
+    .tweet-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+      transition: all 0.2s;
+      margin-left: auto;
+    }
+    .tweet-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--text);
+      transform: scale(1.1);
+    }
     /* Timeline Strip */
     .timeline-strip {
       width: 100%;
@@ -629,6 +646,17 @@
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
                 {formatNumber(tweet.views)}
               </span>
+              {tweet.url && (
+                <a 
+                  href={tweet.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="tweet-link"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z"/></svg>
+                </a>
+              )}
             </div>
           </div>
         </div>
