@@ -684,12 +684,12 @@
       
       return (
         <motion.div className="story-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.5 }}>
-          {/* Background PFP - top, partially hidden on left side */}
+          {/* Background PFP - top-left, full visible, tiny bit hidden on left */}
           {card.profileImage && card.type !== 'intro' && (
             <div style={{
               position: 'absolute',
-              top: '-20%',
-              left: '5%',
+              top: '5%',
+              left: '-8%',
               width: '55%',
               aspectRatio: '1/1',
               opacity: 0.1,
