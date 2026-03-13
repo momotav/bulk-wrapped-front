@@ -174,14 +174,6 @@
     }
     .generate-btn:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(255, 254, 239, 0.25); }
     .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-    .api-disclaimer {
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      text-align: center;
-      line-height: 1.5;
-      max-width: 320px;
-    }
     .loading-screen {
       min-height: 100vh;
       display: flex;
@@ -606,10 +598,6 @@
             <input type="text" className="handle-input" placeholder="Enter your @handle" value={handle} onChange={(e) => setHandle(e.target.value)} />
             <button type="submit" className="generate-btn" disabled={!handle.trim()}>Generate My Wrapped</button>
           </motion.form>
-          <motion.p className="api-disclaimer" initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} transition={{ delay: 1 }}>
-            BULK Wrapped works within Twitter API limits.<br/>
-            Very active users like @kdotcrypto may see partial history.
-          </motion.p>
         </motion.div>
       );
     }
@@ -1036,11 +1024,24 @@
         setHandle(inputHandle);
         setScreen('loading');
         setProgress(0);
-        setLoadingMessage('Connecting...');
+        setLoadingMessage('Scanning your timeline...');
+        
+        const messages = [
+          'Scanning your timeline...',
+          'Finding BULK mentions...',
+          'Looking for gBULK posts...',
+          'Calculating your impact...',
+          'Preparing your wrapped...'
+        ];
+        let msgIdx = 0;
+        const msgInterval = setInterval(() => {
+          msgIdx = (msgIdx + 1) % messages.length;
+          setLoadingMessage(messages[msgIdx]);
+        }, 2500);
         
         let sseWorking = false;
         const es = new EventSource(`${API_URL}/api/wrapped/stream?handle=${encodeURIComponent(inputHandle)}`);
-        const timeout = setTimeout(() => { if (!sseWorking) { es.close(); fallbackFetch(inputHandle); } }, 5000);
+        const timeout = setTimeout(() => { if (!sseWorking) { es.close(); clearInterval(msgInterval); fallbackFetch(inputHandle); } }, 5000);
         
         es.onmessage = (event) => {
           sseWorking = true;
@@ -1048,16 +1049,10 @@
           try {
             const data = JSON.parse(event.data);
             if (data.progress) setProgress(data.progress);
-            if (data.message) {
-              let msg = data.message;
-              if (data.tweets_found !== undefined && data.tweets_found > 0) {
-                msg += ` (${data.tweets_found} scanned)`;
-              }
-              setLoadingMessage(msg);
-            }
-            if (data.step === 'error') { es.close(); setError(data.error); setScreen('error'); }
+            if (data.step === 'error') { es.close(); clearInterval(msgInterval); setError(data.error); setScreen('error'); }
             if (data.step === 'complete') {
               es.close();
+              clearInterval(msgInterval);
               setProgress(100);
               setLoadingMessage('Done!');
               setTimeout(() => { setStats(data.stats); setUser(data.user); setScreen('story'); }, 250);
@@ -1065,7 +1060,7 @@
           } catch (e) {}
         };
         
-        es.onerror = () => { clearTimeout(timeout); es.close(); if (!sseWorking) fallbackFetch(inputHandle); };
+        es.onerror = () => { clearTimeout(timeout); es.close(); clearInterval(msgInterval); if (!sseWorking) fallbackFetch(inputHandle); };
       };
       
       const fallbackFetch = async (inputHandle) => {
