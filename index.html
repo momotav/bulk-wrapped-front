@@ -591,7 +591,7 @@
           </motion.form>
           <motion.p className="api-disclaimer" initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} transition={{ delay: 1 }}>
             BULK Wrapped works within Twitter API limits.<br/>
-            Very active users like @kdotcrypto may see partial history.
+            Very active users like @kdotcrypto or @rizzy_sol may see partial history.
           </motion.p>
         </motion.div>
       );
@@ -796,7 +796,7 @@
                   <div className="profile-pic-placeholder">?</div>
                 )}
                 <motion.h2 className="card-value" style={{ fontSize: '2.5rem', color: theme.valueColor }} initial={{ scale: 0.5 }} animate={{ scale: 1 }}>@{card.handle}</motion.h2>
-                <p className="card-subtitle">Let's see how you've been supporting $BULK</p>
+                <p className="card-subtitle">Let's see how you've been supporting BULK</p>
               </>
             )}
             
@@ -869,7 +869,7 @@
       const cards = [
         { type: 'intro', handle, profileImage, theme: 'default' },
         { type: 'first_post', date: stats.first_post_date || 'Unknown', tweet: firstTweet, handle, profileImage, theme: 'default' },
-        { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK', animate: true, handle, profileImage, theme: 'default' },
+        { type: 'stat', label: 'TOTAL BULK POSTS', value: stats.total_posts, subtitle: 'Times you mentioned BULK in your posts', animate: true, handle, profileImage, theme: 'default' },
         { type: 'stat', label: 'TOTAL VIEWS', value: stats.total_views, subtitle: 'People saw your BULK content', animate: true, handle, profileImage, theme: 'green' },
         { type: 'stat', label: 'TOTAL LIKES', value: stats.total_likes, subtitle: 'Hearts on your BULK posts', animate: true, handle, profileImage, theme: 'red' },
         { type: 'stat', label: 'POSTING STREAK', value: stats.posting_streak + ' months', subtitle: 'Consecutive months supporting BULK', handle, profileImage, theme: 'default' }
