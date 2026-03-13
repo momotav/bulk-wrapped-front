@@ -437,23 +437,9 @@
       background: var(--gradient-white);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 2rem;
     }
-    .share-btn {
-      background: var(--accent);
-      border: none;
-      border-radius: 12px;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--bulk-base);
-      cursor: pointer;
-      display: flex; align-items: center; gap: 0.5rem;
-      margin-top: 2rem;
-      font-family: inherit;
-      box-shadow: 0 4px 20px var(--accent-glow);
-    }
-    .share-btn:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(255, 254, 239, 0.3); }
     .restart-btn {
       background: transparent;
       border: 1px solid var(--border);
@@ -608,7 +594,7 @@
           </motion.form>
           <motion.p className="api-disclaimer" initial={{ opacity: 0 }} animate={{ opacity: 0.6 }} transition={{ delay: 1 }}>
             BULK Wrapped works within Twitter API limits.<br/>
-            Very active users like @kdotcrypto / @rizzy_sol / @junbug_sol may see partial history.
+            Very active users like @kdotcrypto may see partial history.
           </motion.p>
         </motion.div>
       );
@@ -803,7 +789,6 @@
           </button>
           
           <div className="card-content" style={{ position: 'relative', zIndex: 1 }}>
-            <span className="card-number">{index + 1}/{total}</span>
             
             {card.type === 'intro' && (
               <>
@@ -848,7 +833,7 @@
             {card.type === 'final' && (
               <>
                 {card.profileImage && <img src={card.profileImage} alt="" className="profile-pic" style={{ width: '80px', height: '80px', marginBottom: '1rem' }} onError={(e) => e.target.style.display = 'none'} />}
-                <h2 className="final-logo glow">BULK WRAPPED</h2>
+                <h2 className="final-logo">BULK WRAPPED</h2>
                 <p className="card-label">@{card.handle}</p>
                 <div className="summary-grid">
                   {[
@@ -863,13 +848,6 @@
                     </motion.div>
                   ))}
                 </div>
-                <button className="share-btn" onClick={() => {
-                  const text = `My BULK Wrapped\n\n${card.stats.posts} posts\n${card.stats.views} views\n${card.stats.likes} likes\n${card.stats.streak} month streak\n\nGenerate yours at bulkwrapped.com`;
-                  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
-                }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z"/></svg>
-                  Share on X
-                </button>
               </>
             )}
           </div>
