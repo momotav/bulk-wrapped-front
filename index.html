@@ -1011,11 +1011,24 @@
         setHandle(inputHandle);
         setScreen('loading');
         setProgress(0);
-        setLoadingMessage('Connecting...');
+        setLoadingMessage('Scanning your timeline...');
+        
+        const messages = [
+          'Scanning your timeline...',
+          'Finding BULK mentions...',
+          'Looking for gBULK posts...',
+          'Calculating your impact...',
+          'Preparing your wrapped...'
+        ];
+        let msgIdx = 0;
+        const msgInterval = setInterval(() => {
+          msgIdx = (msgIdx + 1) % messages.length;
+          setLoadingMessage(messages[msgIdx]);
+        }, 2500);
         
         let sseWorking = false;
         const es = new EventSource(`${API_URL}/api/wrapped/stream?handle=${encodeURIComponent(inputHandle)}`);
-        const timeout = setTimeout(() => { if (!sseWorking) { es.close(); fallbackFetch(inputHandle); } }, 5000);
+        const timeout = setTimeout(() => { if (!sseWorking) { es.close(); clearInterval(msgInterval); fallbackFetch(inputHandle); } }, 5000);
         
         es.onmessage = (event) => {
           sseWorking = true;
@@ -1023,16 +1036,10 @@
           try {
             const data = JSON.parse(event.data);
             if (data.progress) setProgress(data.progress);
-            if (data.message) {
-              let msg = data.message;
-              if (data.tweets_found !== undefined && data.tweets_found > 0) {
-                msg += ` (${data.tweets_found} scanned)`;
-              }
-              setLoadingMessage(msg);
-            }
-            if (data.step === 'error') { es.close(); setError(data.error); setScreen('error'); }
+            if (data.step === 'error') { es.close(); clearInterval(msgInterval); setError(data.error); setScreen('error'); }
             if (data.step === 'complete') {
               es.close();
+              clearInterval(msgInterval);
               setProgress(100);
               setLoadingMessage('Done!');
               setTimeout(() => { setStats(data.stats); setUser(data.user); setScreen('story'); }, 250);
@@ -1040,7 +1047,7 @@
           } catch (e) {}
         };
         
-        es.onerror = () => { clearTimeout(timeout); es.close(); if (!sseWorking) fallbackFetch(inputHandle); };
+        es.onerror = () => { clearTimeout(timeout); es.close(); clearInterval(msgInterval); if (!sseWorking) fallbackFetch(inputHandle); };
       };
       
       const fallbackFetch = async (inputHandle) => {
